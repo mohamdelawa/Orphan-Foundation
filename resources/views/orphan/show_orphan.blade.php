@@ -200,8 +200,9 @@
                             <div class="col-md-6" >
                                 <div class="custom-file row" style="margin: 10px;">
                                     <div class="row " style="margin-bottom: 10px; justify-content: center">
-                                        <img src="{{asset($orphan->personalPicture)}}" class="rounded" alt="Cinque Terre" width="150" height="150">
-
+                                        @if($orphan->personalPicture !="")
+                                            <img src="{{asset($orphan->personalPicture)}}" class="rounded" alt="Cinque Terre" width="150" height="150">
+                                        @endif
                                     </div>
                                    <div class="row">
                                        <label for="personalPicture" class="col-md-3"><b> صورة شخصية</b></label>
@@ -215,33 +216,50 @@
                                    </div>
                                 </div>
                                 <div class="custom-file row" style="margin: 10px;">
-                                    <label for="birthCertificate" class="col-md-3"><b>شهادة الميلاد</b></label>
-                                    <div class="custom-file col-md-8 mr-md-2" id="birthCertificate">
+                                    <div class="row " style="margin-bottom: 10px; justify-content: center">
+                                     @if($orphan->birthCertificate !="")
+                                            <img src="{{asset($orphan->birthCertificate)}}" class="rounded" alt="birth Certificate" width="150" height="150">
+                                    @endif
+                                    </div>
+                                    <div class="row">
+                                        <label for="birthCertificate" class="col-md-3"><b>شهادة الميلاد</b></label>
+                                        <div class="custom-file col-md-8 mr-md-2" id="birthCertificate">
                                         <input type="file" class="custom-file-input @error('birthCertificate') is-invalid @enderror" id="customFile" name="birthCertificate" >
                                         <label class="custom-file-label " for="customFile" style="text-align: left">Choose file</label>
                                         @error('birthCertificate')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    </div>
                                 </div>
                                 <div class="custom-file row" style="margin: 10px;">
-                                    <label for="schoolCertificate" class="col-md-3"><b>شهادة المدرسة</b></label>
-                                    <div class="custom-file col-md-8 mr-md-2" id="schoolCertificate">
+                                    <div class="row " style="margin-bottom: 10px; justify-content: center">
+                                        @if($orphan->schoolCertificate !="")
+                                            <img src="{{asset($orphan->schoolCertificate)}}" class="rounded" alt="Cinque Terre" width="150" height="150">
+                                        @endif
+                                    </div>
+                                    <div class="row">
+                                        <label for="schoolCertificate" class="col-md-3"><b>شهادة المدرسة</b></label>
+                                        <div class="custom-file col-md-8 mr-md-2" id="schoolCertificate">
                                         <input type="file" class="custom-file-input @error('schoolCertificate') is-invalid @enderror" id="customFile" name="schoolCertificate" >
                                         <label class="custom-file-label " for="customFile" style="text-align: left">Choose file</label>
                                         @error('schoolCertificate')
                                         <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
+                                    </div>
                                 </div>
                                 <div class="custom-file row" style="margin: 10px;">
-                                    <label for="OtherAttachments" class="col-md-3"><b>مرفقات أخرى</b></label>
-                                    <div class="custom-file col-md-8 mr-md-2" id="OtherAttachments">
-                                        <input type="file" class="custom-file-input  @error('otherAttachments') is-invalid @enderror" id="customFile" multiple   name="otherAttachments[]" >
-                                        <label class="custom-file-label " for="customFile" style="text-align: left">Choose file</label>
-                                        @error('otherAttachments')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
+                                    <div class="row " style="margin-bottom: 10px; justify-content: center"></div>
+                                    <div class="row">
+                                        <label for="OtherAttachments" class="col-md-3"><b>مرفقات أخرى</b></label>
+                                        <div class="custom-file col-md-8 mr-md-2" id="OtherAttachments">
+                                            <input type="file" class="custom-file-input  @error('otherAttachments') is-invalid @enderror" id="customFile" multiple   name="otherAttachments[]" >
+                                            <label class="custom-file-label " for="customFile" style="text-align: left">Choose file</label>
+                                            @error('otherAttachments')
+                                            <div class="alert alert-danger">{{ $message }}</div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
                                 <script>
