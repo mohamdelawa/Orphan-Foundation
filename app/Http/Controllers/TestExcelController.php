@@ -121,4 +121,39 @@ class TestExcelController extends Controller
 
 
     }
+    function  reportOrphan($id){
+        $orphan = Orphan::all()->find($id);
+        if ($orphan != null) {
+            $data['orphanNumber'] = $orphan->orphanNumber;
+            $data['orphanName'] = $orphan->orphanName;
+            $data['breadwinnerName'] = $orphan->breadwinnerName;
+            $data['dob'] = $orphan->dob;
+            $data['address'] = $orphan->address;
+            $data['healthStatus'] = $orphan->healthStatus;
+            $mytime = Carbon::now();
+            $data['date'] = $mytime->toDateString();
+            $pdf = new Mpdf();
+            $viewInfo = View::make('excel.reports.pdfInfo',$data);
+            $htmlInfo = $viewInfo->render();
+            $viewCertificate = View::make('excel.reports.certificate',$data);
+            $htmlCertificate = $viewCertificate->render();
+            $viewThankYou = View::make('excel.reports.pdfThankYou',$data);
+            $htmlThankYou = $viewThankYou->render();
+            $viewImages = View::make('excel.reports.pdfImage',$data);
+            $htmlImages = $viewImages->render();
+            $pdf->WriteHTML($htmlInfo);
+            $pdf->AddPage();
+            $pdf->WriteHTML($htmlCertificate);
+            $pdf->AddPage();
+            $pdf->WriteHTML($htmlThankYou);
+            $pdf->AddPage();
+            $pdf->WriteHTML($htmlImages);
+            $pdf->Output(public_path($orphan->orphanNumber.'.pdf'), 'F');
+            return response()->download(public_path($orphan->orphanNumber.'.pdf'));
+        }else{
+            return redirect()->back()->with(['error'=>'error download']);
+        }
+
+
+    }
 }

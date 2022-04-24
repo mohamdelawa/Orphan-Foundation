@@ -36,7 +36,11 @@
                             <div class="col-md-1" >
                                 <a href="{{route('form.add.orphan')}}"> <button class="btn btn-primary  " ><i class="nav-icon fas fa-plus"></i></button></a>
                             </div>
-                            <div class="col-md-10" >
+                            <div class="col-md-1" >
+                                <button class="btn btn-primary  "  id="btnReportOrphan"><i class="nav-icon fas fa-download"></i> </button>
+                            </div>
+
+                            <div class="col-md-9" >
                                 <span class="">الأيتام</span>
                             </div>
                         </div>
@@ -216,7 +220,27 @@
                     })
                 }
             });
+            $("#btnReportOrphan").click(function(){
+                var checkedOrphans = [];
+                $('input[name="orphan_checkbox"]:checked').each(function(){
+                    checkedOrphans.push($(this).data('id'));
+                });
+                if(checkedOrphans.length>0){
+                    var url = '<?= route("reportOrphan") ?>';
+                    $.post(url,{id:orphan_id}, function(data){
+                        if(data.code == 1){
+                            $('#orphans-table').DataTable().ajax.reload(null, false);
+                            toastr.success(data.msg);
+                        }else{
+                            toastr.error(data.msg);
+                        }
+                    },'json');
+                }
+
+            });
         });
+
+
     </script>
 
 

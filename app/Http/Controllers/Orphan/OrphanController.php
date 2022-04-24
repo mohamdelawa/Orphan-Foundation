@@ -84,9 +84,14 @@ class OrphanController extends Controller
             ->addIndexColumn()
             ->addColumn('actions', function($row){
                 return '<div class="btn-group">
-                                                <a href="'.route('show.orphan',['id'=>$row['id']]).'"><button class="btn btn-sm btn-primary"   style="margin: 5px">تعديل</button></a>
-                                                <button class="btn btn-sm btn-danger"  data-id="'.$row['id'].'" id="deleteOrphanBtn" style="margin: 5px">حذف</button>
-                                          </div>';
+                                <a href="'.route('reportOrphan',['id'=>$row['id']]).'">
+                                    <button class="btn btn-primary" ><i class="nav-icon fas fa-download"></i> </button>
+                                </a>
+                                <a href="'.route('show.orphan',['id'=>$row['id']]).'">
+                                    <button class="btn btn-sm btn-primary"   style="margin: 5px">تعديل</button>
+                                </a>
+                                <button class="btn btn-sm btn-danger"  data-id="'.$row['id'].'" id="deleteOrphanBtn" style="margin: 5px">حذف</button>
+                        </div>';
             })
             ->addColumn('checkbox', function($row){
                 return '<input type="checkbox" name="orphan_checkbox" data-id="'.$row['id'].'"><label></label>';

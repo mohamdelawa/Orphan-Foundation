@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/import', 'TestExcelController@importFile')->name('import');
 Route::post('/import', 'TestExcelController@importExcel');
 
+Route::get('/reportOrphan/{id}', 'TestExcelController@reportOrphan')->name('reportOrphan');
 Route::get('/report', 'TestExcelController@pdf')->name('pdf');
 Route::get('/index', function () {
     return view('orphan.index');
