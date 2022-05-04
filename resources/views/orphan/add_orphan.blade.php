@@ -16,13 +16,13 @@
                     </div>
                     <div class="card-body  ">
                         <div class="row text-right " style="direction: rtl" >
-                            <div class="col-md-6" >
+                            <div class="col-md-10" >
                                 <div class="form-group row">
-                                    <label for="orphanNumber " class="col-md-2"><b>رقم اليتيم </b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-5 mr-md-3  @error('orphanNumber') is-invalid @enderror " required id="orphanNumber" name="orphanNumber" value="{{old('orphanNumber')}}">
-                                    @error('orphanNumber')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                       <label for="orphanNumber " class="col-md-2"><b>رقم اليتيم </b><span style="color: red">*</span></label>
+                                       <input type="text" class="form-control col-md-5 mr-md-3  @error('orphanNumber') is-invalid @enderror "  id="orphanNumber" name="orphanNumber" value="{{old('orphanNumber')}}">
+                                       @error('orphanNumber')
+                                       <div class="alert alert-danger">{{ $message }}</div>
+                                       @enderror
                                 </div>
                                 <div class="form-group row">
                                     <label for="orphanName" class="col-md-2"><b>اسم اليتيم </b><span style="color: red">*</span></label>
@@ -197,55 +197,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-6" >
-                                <div class="custom-file row" style="margin: 10px;">
-                                    <label for="personalPicture" class="col-md-3"><b> صورة شخصية</b></label>
-                                    <div class="custom-file col-md-8 mr-md-2" id="personalPicture">
-                                        <input type="file" class="custom-file-input @error('personalPicture') is-valid @enderror " id="customFile" name="personalPicture" >
-                                        <label class="custom-file-label " for="customFile" style="text-align: left">Choose file</label>
-                                        @error('personalPicture')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="custom-file row" style="margin: 10px;">
-                                    <label for="birthCertificate" class="col-md-3"><b>شهادة الميلاد</b></label>
-                                    <div class="custom-file col-md-8 mr-md-2" id="birthCertificate">
-                                        <input type="file" class="custom-file-input @error('birthCertificate') is-invalid @enderror" id="customFile" name="birthCertificate" >
-                                        <label class="custom-file-label " for="customFile" style="text-align: left">Choose file</label>
-                                        @error('birthCertificate')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                    </div>
-                                <div class="custom-file row" style="margin: 10px;">
-                                    <label for="schoolCertificate" class="col-md-3"><b>شهادة المدرسة</b></label>
-                                    <div class="custom-file col-md-8 mr-md-2" id="schoolCertificate">
-                                        <input type="file" class="custom-file-input @error('schoolCertificate') is-invalid @enderror" id="customFile" name="schoolCertificate" >
-                                        <label class="custom-file-label " for="customFile" style="text-align: left">Choose file</label>
-                                        @error('schoolCertificate')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="custom-file row" style="margin: 10px;">
-                                    <label for="OtherAttachments" class="col-md-3"><b>مرفقات أخرى</b></label>
-                                    <div class="custom-file col-md-8 mr-md-2" id="OtherAttachments">
-                                        <input type="file" class="custom-file-input  @error('otherAttachments') is-invalid @enderror" id="customFile" multiple   name="otherAttachments[]" >
-                                        <label class="custom-file-label " for="customFile" style="text-align: left">Choose file</label>
-                                        @error('otherAttachments')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <script>
-                                    // Add the following code if you want the name of the file appear on select
-                                    $(".custom-file-input").on("change", function() {
-                                        var fileName = $(this).val().split("\\").pop();
-                                        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
-                                    });
-                                </script>
-                                 </div>
+
                         </div>
                     </div>
                     <div class="card-footer">

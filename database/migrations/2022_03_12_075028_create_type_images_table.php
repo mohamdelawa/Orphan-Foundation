@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnToOrphanImages extends Migration
+class CreateTypeImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class AddColumnToOrphanImages extends Migration
      */
     public function up()
     {
-        Schema::table('orphan_images', function (Blueprint $table) {
-            $table->unsignedBigInteger('orphan_id');
-            $table->foreign('orphan_id')->references('id')->on('orphans');
+        Schema::create('type_images', function (Blueprint $table) {
+            $table->id();
+            $table->string('type');
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
+            $table->timestamps();
         });
     }
 
@@ -28,8 +29,6 @@ class AddColumnToOrphanImages extends Migration
      */
     public function down()
     {
-        Schema::table('orphan_images', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('type_images');
     }
 }

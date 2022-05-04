@@ -9,7 +9,6 @@ use DataTables;
 class RoleController extends Controller
 {
     //RoleS LIST
-
     public function index(){
         return view('role/index');
     }
@@ -28,9 +27,9 @@ class RoleController extends Controller
              $query = $role->save();
 
              if(!$query){
-                 return response()->json(['code'=>0,'msg'=>'Something went wrong']);
+                 return response()->json(['code'=>0,'msg'=>'هناك خطأ ما']);
              }else{
-                 return response()->json(['code'=>1,'msg'=>'New Role has been successfully saved']);
+                 return response()->json(['code'=>1,'msg'=>'تم إضافة رتبة بنجاح']);
              }
          }
     }
@@ -78,9 +77,9 @@ class RoleController extends Controller
             $query = $role->save();
 
             if($query){
-                return response()->json(['code'=>1, 'msg'=>'Role Details have Been updated']);
+                return response()->json(['code'=>1, 'msg'=>'تم تحديث بيانات الرتبة']);
             }else{
-                return response()->json(['code'=>0, 'msg'=>'Something went wrong']);
+                return response()->json(['code'=>0, 'msg'=>'هناك خطأ ما']);
             }
         }
     }
@@ -91,9 +90,9 @@ class RoleController extends Controller
         $query = Role::find($role_id)->delete();
 
         if($query){
-            return response()->json(['code'=>1, 'msg'=>'role has been deleted from database']);
+            return response()->json(['code'=>1, 'msg'=>'تم حذف الرتبة بنجاح']);
         }else{
-            return response()->json(['code'=>0, 'msg'=>'Something went wrong']);
+            return response()->json(['code'=>0, 'msg'=>'هناك خطأ ما']);
         }
     }
 
@@ -101,7 +100,7 @@ class RoleController extends Controller
     public function deleteSelectedRoles(Request $request){
        $role_ids = $request->role_ids;
        Role::whereIn('id', $role_ids)->delete();
-       return response()->json(['code'=>1, 'msg'=>'Roles have been deleted from database']);
+       return response()->json(['code'=>1, 'msg'=>'تم حذف الرتب بنجاح']);
     }
 
 

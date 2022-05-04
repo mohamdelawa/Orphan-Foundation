@@ -45,4 +45,16 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class, 'id');
     }
+    public function imagesGallery()
+    {
+        return $this->hasMany(ImageGallery::class);
+    }
+    public function orphans()
+    {
+        return $this->hasMany(Orphan::class);
+    }
+    public function typesImage()
+    {
+        return $this->hasMany(TypeImage::class);
+    }
 }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Orphan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Orphan;
-use App\Models\OrphanImage;
+use App\Models\TypeImage;
 use Illuminate\Http\Request;
 use DataTables;
 use Illuminate\Support\Facades\Validator;
@@ -102,7 +102,9 @@ class OrphanController extends Controller
     public function show(Request $request)
     {
         $orphan = Orphan::all()->find($request->id);
-        return view('orphan.show_orphan', compact(['orphan']));
+        $types_image = TypeImage::all();
+        $personalPicture = $orphan->imagesGallery->where('type_image_id','=',TypeImage::all()->where('type','=','صورة شخصية')->first()->id)->first()->path;
+        return view('orphan.show_orphan', compact(['orphan','types_image','personalPicture']));
     }
     public function store(Request $request)
     {
@@ -127,12 +129,7 @@ class OrphanController extends Controller
             'gender' => 'required:string',
             'fathersDeathDate' => 'required:date',
             'causeOfDeath' => 'required:string',
-            'status' => 'required:string',
-            'personalPicture' => 'mimes:jpeg,jpg,png,gif|max:10000',
-            'birthCertificate' => 'mimes:jpeg,jpg,png,gif|max:10000',
-            'schoolCertificate' => 'mimes:jpeg,jpg,png,gif|max:10000',
-            'otherAttachments.*' => 'mimes:jpeg,jpg,png,gif|max:10000',
-
+            'status' => 'required:string'
         ];
         $masseges = [];
         $validator = Validator::make($request->all(), $rules, $masseges);
@@ -171,38 +168,8 @@ class OrphanController extends Controller
         }else{
             $orphan->status = 1;
         }
-        if ($request->file('personalPicture') != null) {
-            $file = $request->file('personalPicture');
-            $filename = $file->getClientOriginalName() . time() . '.' . $file->extension();
-            $request->file('personalPicture')->move('asset/imagesOrphan', $filename);
-            $orphan->personalPicture = 'asset/imagesOrphan/' . $filename;
-        }
-        if ($request->file('birthCertificate') != null) {
-            $file = $request->file('birthCertificate');
-            $filename = $file->getClientOriginalName() . time() . '.' . $file->extension();
-            $request->file('birthCertificate')->move('asset/imagesOrphan', $filename);
-            $orphan->birthCertificate = 'asset/imagesOrphan/' . $filename;
-        }
-        if ($request->file('schoolCertificate') != null) {
-            $file = $request->file('schoolCertificate');
-            $filename = $file->getClientOriginalName() . time() . '.' . $file->extension();
-            $request->file('schoolCertificate')->move('asset/imagesOrphan', $filename);
-            $orphan->schoolCertificate = 'asset/imagesOrphan/' . $filename;
-        }
         $orphan->user_id = auth()->user()->id;
         if ($orphan->save()) {
-            if ($request->otherAttachments != null) {
-                foreach ($request->file('otherAttachments') as $file){
-                    $filename = $file->getClientOriginalName().time(). '.' . $file->extension();
-                    $file->move('asset/imagesOrphan', $filename);
-                    $orphan_image =new OrphanImage();
-                    $orphan_image->url = "asset/imagesOrphan/" . $filename;
-
-                    $orphan_image->orphan_id =  $orphan->id;
-                    $orphan_image->user_id = auth()->user()->id;
-                    $orphan_image->save();
-                }
-            }
             return redirect()->back()->with(['success' => 'تمت عملية إضافة يتيم بنجاح !']);
         } else {
             return redirect()->back()->with(['error' => 'فشلت عملية إضافة يتيم !']);
@@ -231,12 +198,7 @@ class OrphanController extends Controller
             'gender' => 'required:string',
             'fathersDeathDate' => 'required:date',
             'causeOfDeath' => 'required:string',
-            'status' => 'required:string',
-            'personalPicture' => 'mimes:jpeg,jpg,png,gif|max:10000',
-            'birthCertificate' => 'mimes:jpeg,jpg,png,gif|max:10000',
-            'schoolCertificate' => 'mimes:jpeg,jpg,png,gif|max:10000',
-            'otherAttachments.*' => 'mimes:jpeg,jpg,png,gif|max:10000',
-
+            'status' => 'required:string'
         ];
         $masseges = [];
         $validator = Validator::make($request->all(), $rules, $masseges);
@@ -275,38 +237,9 @@ class OrphanController extends Controller
         }else{
             $orphan->status = 1;
         }
-        if ($request->file('personalPicture') != null) {
-            $file = $request->file('personalPicture');
-            $filename = $file->getClientOriginalName() . time() . '.' . $file->extension();
-            $request->file('personalPicture')->move('asset/imagesOrphan', $filename);
-            $orphan->personalPicture = 'asset/imagesOrphan/' . $filename;
-        }
-        if ($request->file('birthCertificate') != null) {
-            $file = $request->file('birthCertificate');
-            $filename = $file->getClientOriginalName() . time() . '.' . $file->extension();
-            $request->file('birthCertificate')->move('asset/imagesOrphan', $filename);
-            $orphan->birthCertificate = 'asset/imagesOrphan/' . $filename;
-        }
-        if ($request->file('schoolCertificate') != null) {
-            $file = $request->file('schoolCertificate');
-            $filename = $file->getClientOriginalName() . time() . '.' . $file->extension();
-            $request->file('schoolCertificate')->move('asset/imagesOrphan', $filename);
-            $orphan->schoolCertificate = 'asset/imagesOrphan/' . $filename;
-        }
+
         $orphan->user_id = auth()->user()->id;
         if ($orphan->save()) {
-            if ($request->otherAttachments != null) {
-                foreach ($request->file('otherAttachments') as $file){
-                    $filename = $file->getClientOriginalName().time(). '.' . $file->extension();
-                    $file->move('asset/imagesOrphan', $filename);
-                    $orphan_image =new OrphanImage();
-                    $orphan_image->url = "asset/imagesOrphan/" . $filename;
-
-                    $orphan_image->orphan_id =  $orphan->id;
-                    $orphan_image->user_id = auth()->user()->id;
-                    $orphan_image->save();
-                }
-            }
             return redirect()->back()->with(['success' => 'تمت عملية تعديل بيانات اليتيم بنجاح !']);
         } else {
             return redirect()->back()->with(['error' => 'فشلت عملية تعديل بيانات اليتيم !']);
@@ -318,15 +251,15 @@ class OrphanController extends Controller
         $query = Orphan::find($orphan_id)->delete();
 
         if($query){
-            return response()->json(['code'=>1, 'msg'=>'user has been deleted from database']);
+            return response()->json(['code'=>1, 'msg'=>'تم حذف اليتيم بنجاح']);
         }else{
-            return response()->json(['code'=>0, 'msg'=>'Something went wrong']);
+            return response()->json(['code'=>0, 'msg'=>'هناك خطأ ما']);
         }
     }
     public function deleteSelectedOrphans(Request $request){
         $orphan_ids = $request->orphan_ids;
         Orphan::whereIn('id', $orphan_ids)->delete();
-        return response()->json(['code'=>1, 'msg'=>'Users have been deleted from database']);
+        return response()->json(['code'=>1, 'msg'=>'تم حذف الأيتام بنجاح']);
     }
 
 }

@@ -44,9 +44,9 @@ class UserController extends Controller
             $query = $user->save();
 
             if(!$query){
-                return response()->json(['code'=>0,'msg'=>'Something went wrong']);
+                return response()->json(['code'=>0,'msg'=>'هناك خطأ ما']);
             }else{
-                return response()->json(['code'=>1,'msg'=>'New User has been successfully saved']);
+                return response()->json(['code'=>1,'msg'=>'تم إضافة مستخدم حديد بنجاح']);
             }
         }
     }
@@ -126,9 +126,9 @@ class UserController extends Controller
         $query = User::find($user_id)->delete();
 
         if($query){
-            return response()->json(['code'=>1, 'msg'=>'user has been deleted from database']);
+            return response()->json(['code'=>1, 'msg'=>'تم حذف المستخدم بنجاح']);
         }else{
-            return response()->json(['code'=>0, 'msg'=>'Something went wrong']);
+            return response()->json(['code'=>0, 'msg'=>'هناك خطأ ما']);
         }
     }
 
@@ -136,7 +136,7 @@ class UserController extends Controller
     public function deleteSelectedUsers(Request $request){
         $user_ids = $request->user_ids;
         User::whereIn('id', $user_ids)->delete();
-        return response()->json(['code'=>1, 'msg'=>'Users have been deleted from database']);
+        return response()->json(['code'=>1, 'msg'=>'تم حذف المستخدمين بنجاح']);
     }
 
 

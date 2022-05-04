@@ -149,9 +149,10 @@ class TestExcelController extends Controller
             $pdf->AddPage();
             $pdf->WriteHTML($htmlImages);
             $pdf->Output(public_path($orphan->orphanNumber.'.pdf'), 'F');
-            return response()->download(public_path($orphan->orphanNumber.'.pdf'));
+            response()->download(public_path($orphan->orphanNumber.'.pdf'));
+           //return response()->json(['code'=>1, 'msg'=>'user has been deleted from database']);
         }else{
-            return redirect()->back()->with(['error'=>'error download']);
+            return response()->json(['code'=>0, 'msg'=>'Something went wrong']);
         }
 
 

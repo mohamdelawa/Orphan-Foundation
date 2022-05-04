@@ -38,9 +38,6 @@ class CreateOrphansTable extends Migration
             $table->string('marketingDate')->nullable();
             $table->string('guarantyDate')->nullable();
             $table->boolean('status')->default(false);
-            $table->string('personalPicture')->nullable();
-            $table->string('birthCertificate')->nullable();
-            $table->string('schoolCertificate')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -225,16 +225,31 @@
                 $('input[name="orphan_checkbox"]:checked').each(function(){
                     checkedOrphans.push($(this).data('id'));
                 });
+                var i = 0;
                 if(checkedOrphans.length>0){
-                    var url = '<?= route("reportOrphan") ?>';
-                    $.post(url,{id:orphan_id}, function(data){
-                        if(data.code == 1){
-                            $('#orphans-table').DataTable().ajax.reload(null, false);
-                            toastr.success(data.msg);
-                        }else{
-                            toastr.error(data.msg);
-                        }
-                    },'json');
+
+                    for (i ; i<checkedOrphans.length;i++){
+                        var data = '';
+                        $.ajax({
+                            type: 'GET',
+                            url: '/reportOrphan/'+checkedOrphans[i],
+                            data: data,
+                            xhrFields: {
+                                responseType: 'blob'
+                            },
+                            success: function(response){
+                                var blob = new Blob([response]);
+                                var link = document.createElement('a');
+                                link.href = window.URL.createObjectURL(blob);
+                                link.download = "orphan.pdf";
+                                link.click();
+                            },
+                            error: function(blob){
+                                console.log(blob);
+                            }
+                        });
+                    }
+
                 }
 
             });

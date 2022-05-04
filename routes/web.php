@@ -7,6 +7,7 @@ Route::post('/import', 'TestExcelController@importExcel');
 
 Route::get('/reportOrphan/{id}', 'TestExcelController@reportOrphan')->name('reportOrphan');
 Route::get('/report', 'TestExcelController@pdf')->name('pdf');
+
 Route::get('/index', function () {
     return view('orphan.index');
 })->name('dashboard');
@@ -23,7 +24,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/updateOrphan/{id}', 'Orphan\OrphanController@update')->name('update.orphan');
         Route::post('/deleteOrphan','Orphan\OrphanController@deleteOrphan')->name('delete.orphan');
         Route::post('/deleteSelectedOrphan','Orphan\OrphanController@deleteSelectedOrphans')->name('delete.selected.orphans');
-
+        //image gallery for orphan
+        Route::post('/add-image','Orphan\ImageGalleryController@addImage')->name('add.image');
+        Route::get('/getImagesList/{id}','Orphan\ImageGalleryController@getImagesList')->name('get.images.list');
+        Route::post('/getImageDetails','Orphan\ImageGalleryController@getImageDetails')->name('get.image.details');
+        Route::post('/updateImageDetails','Orphan\ImageGalleryController@updateImageDetails')->name('update.image.details');
+        Route::post('/deleteImage','Orphan\ImageGalleryController@deleteImage')->name('delete.image');
+        Route::post('/deleteSelectedImages','Orphan\ImageGalleryController@deleteSelectedImages')->name('delete.selected.images');
     });
     Route::prefix('roles')->group(function (){
         Route::get('/','User\RoleController@index')->name('roles.list');
