@@ -37,6 +37,7 @@
                             </div>
 
                         </form>
+                        <a href="{{ url('/sample/test.xlsx') }}"><i class="nav-icon fas fa-download"></i> تنزيل مثال</a>
                           <hr/>
                         <div>
                             <ul id="errors_excel">
