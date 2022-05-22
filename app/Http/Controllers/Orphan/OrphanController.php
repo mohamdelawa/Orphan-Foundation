@@ -47,12 +47,12 @@ class OrphanController extends Controller
             break;
             case "8":{
                 $typeSearch = "status";
-                $valueSearch = "marketing";
+                $valueSearch = 0;
             }
             break;
             case "9":{
                 $typeSearch = "status";
-                $valueSearch = "guaranteed";
+                $valueSearch = 1;
             }
                 break;
             default:{

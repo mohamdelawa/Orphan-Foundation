@@ -22,7 +22,6 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -54,7 +53,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('users.list')}}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
+                        <i class="nav-icon fas fa-user-friends"></i>
                         <p>
                             Users
                         </p>
@@ -62,19 +61,40 @@
                 </li>
                 <li class="nav-item">
                     <a href="{{route('roles.list')}}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
+                        <i class="nav-icon fas fa-address-card"></i>
                         <p>
                             Roles
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('orphans.list')}}" class="nav-link">
-                        <i class="nav-icon fas fa-th"></i>
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-user"></i>
                         <p>
                             Orphans
+                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('orphans.list')}}" class="nav-link">
+                                <i class="fas fa-th nav-icon"></i>
+                                <p>Orphans</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('form.add.orphan')}}" class="nav-link">
+                                <i class="nav-icon fas fa-plus"></i>
+                                <p>Add Orphan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('form.import.excel.orphans')}}" class="nav-link">
+                                <i class="fas fa-file-excel nav-icon"></i>
+                                <p>Add Excel Orphans</p>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
         </nav>

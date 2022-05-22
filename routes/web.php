@@ -31,6 +31,13 @@ Route::middleware('auth')->group(function () {
         Route::post('/updateImageDetails','Orphan\ImageGalleryController@updateImageDetails')->name('update.image.details');
         Route::post('/deleteImage','Orphan\ImageGalleryController@deleteImage')->name('delete.image');
         Route::post('/deleteSelectedImages','Orphan\ImageGalleryController@deleteSelectedImages')->name('delete.selected.images');
+        Route::prefix('import')->group(function (){
+            Route::get('/importExcelOrphans', 'Orphan\ImportExcelOrphansController@index')->name('form.import.excel.orphans');
+            Route::post('/addExcelOrphans','Orphan\ImportExcelOrphansController@store')->name('add.excel.orphans');
+            Route::post('/uploadImagesReports', 'TestExcelController@uploadFolder')->name('import.images.reports.orphan');
+
+        });
+
     });
     Route::prefix('roles')->group(function (){
         Route::get('/','User\RoleController@index')->name('roles.list');
@@ -68,7 +75,7 @@ Route::get('/403', function () {
 
 
 Route::get('/test', function () {
-    return view('chat.index');
+    return view('welcome');
 });
 
 

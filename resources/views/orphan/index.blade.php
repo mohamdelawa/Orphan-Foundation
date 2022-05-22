@@ -32,17 +32,9 @@
                 </div>
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header row " style="text-align: right;">
-                            <div class="col-md-1" >
-                                <a href="{{route('form.add.orphan')}}"> <button class="btn btn-primary  " ><i class="nav-icon fas fa-plus"></i></button></a>
-                            </div>
-                            <div class="col-md-1" >
-                                <button class="btn btn-primary  "  id="btnReportOrphan"><i class="nav-icon fas fa-download"></i> </button>
-                            </div>
+                        <div class="card-header" style="text-align: right;">
 
-                            <div class="col-md-9" >
                                 <span class="">الأيتام</span>
-                            </div>
                         </div>
                         <div class="card-body table-responsive" style="text-align: right">
 

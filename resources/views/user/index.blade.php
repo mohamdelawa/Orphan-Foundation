@@ -9,10 +9,10 @@
                     <div class="card">
                         <div class="card-header row " style="text-align: right;">
 
-                            <div class="col-md-2" >
-                                <button class="btn btn-primary  " data-toggle="modal" data-target="#addUser">اضافة مستخدم</button>
+                            <div class="col-md-1" >
+                                <button class="btn btn-primary  " data-toggle="modal" data-target="#addUser"><i class="nav-icon fas fa-plus"></i></button>
                             </div>
-                            <div class="col-md-10" >
+                            <div class="col-md-11" >
                                 <span class="">المستخدمون</span>
                             </div>
                         </div>
