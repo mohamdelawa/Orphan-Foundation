@@ -109,8 +109,8 @@
             <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
                 <div class="dropdown-divider"></div>
                 <a href="{{route('logout')}}" class="dropdown-item" style="direction: rtl;text-align: right">
-                    <img src="{{asset('asset/img/logout.png')}}" width="35" height="35">
-                 <span>    تسجيل خروج</span>
+                    <i class="nav-icon fas fa-sign-out-alt"></i>
+                    <span> تسجيل خروج</span>
                 </a>
                  </div>
         </li>
