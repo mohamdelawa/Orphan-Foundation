@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 use App\Models\Orphan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\View;
 use Importer;
 use Illuminate\Http\Request;
@@ -163,7 +162,7 @@ class TestExcelController extends Controller
             $pdf->AddPage();
             $pdf->WriteHTML($htmlImages);
             $pdf->Output(public_path($orphan->orphanNumber.'.pdf'), 'F');
-            response()->download(public_path($orphan->orphanNumber.'.pdf'));
+           return response()->download(public_path($orphan->orphanNumber.'.pdf'))->deleteFileAfterSend(true);
            //return response()->json(['code'=>1, 'msg'=>'user has been deleted from database']);
         }else{
             return response()->json(['code'=>0, 'msg'=>'Something went wrong']);

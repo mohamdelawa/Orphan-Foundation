@@ -82,46 +82,14 @@
                                 $(form).find('span.'+prefix+'_error').text(val[0]);
                             });
                             toastr.error(data.msg);
-                        }else if(data.code == -1){
+                        }else if(data.code == 1){
                             const list = document.getElementById('errors_excel');
-                            $.each(data.errors, function(prefix, val){
-                                var msg = 'اليتيم ال '+val['row']+' [ '+val['column']+' : '+val['msg']+' ].';
-                                const entry = document.createElement('li');
-                                entry.appendChild(document.createTextNode(msg));
-                                entry.style.color='red';
-                                list.appendChild(entry);
-                            });
-                            toastr.error(data.msg);
-                        }
-                        else{
+                           list.innerHTML = data.errors;
                             toastr.success(data.msg);
                         }
                     }
                 });
             });
-            //GET ALL USERS
-            var table =  $('#users-table').DataTable({
-                processing:true,
-                info:true,
-                ajax:"{{ route('get.users.list') }}",
-                "pageLength":5,
-                "aLengthMenu":[[5,10,25,50,-1],[5,10,25,50,"All"]],
-                columns:[
-                    //  {data:'id', name:'id'},
-                    {data:'DT_RowIndex', name:'DT_RowIndex'},
-                    {data:'checkbox', name:'checkbox', orderable:false, searchable:false},
-                    {data:'name', name:'name'},
-                    {data:'phone_number', name:'phone_number'},
-                    {data:'user_name', name:'user_name'},
-                    {data:'role', name:'role'},
-                    {data:'actions', name:'actions', orderable:false, searchable:false},
-                ]
-            }).on('draw', function(){
-                $('input[name="user_checkbox"]').each(function(){this.checked = false;});
-                $('input[name="main_checkbox"]').prop('checked', false);
-                $('button#deleteAllBtn').addClass('d-none');
-            });
-
         });
     </script>
 

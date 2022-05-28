@@ -18,7 +18,7 @@ class UserController extends Controller
     }
 
     //ADD NEW User
-    public function addUser(Request $request){
+    public function store(Request $request){
         $validator = \Validator::make($request->all(),[
             'user_name'=>'required|unique:users',
             'name'=>'required',
@@ -44,7 +44,7 @@ class UserController extends Controller
             $query = $user->save();
 
             if(!$query){
-                return response()->json(['code'=>0,'msg'=>'هناك خطأ ما']);
+                return response()->json(['code'=>0,'msg'=>'فشلت عملية إضافة مستخدم جديد']);
             }else{
                 return response()->json(['code'=>1,'msg'=>'تم إضافة مستخدم حديد بنجاح']);
             }
@@ -131,8 +131,6 @@ class UserController extends Controller
             return response()->json(['code'=>0, 'msg'=>'هناك خطأ ما']);
         }
     }
-
-
     public function deleteSelectedUsers(Request $request){
         $user_ids = $request->user_ids;
         User::whereIn('id', $user_ids)->delete();

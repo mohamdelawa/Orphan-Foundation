@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Importer;
+
 class ImportExcelOrphansController extends Controller
 {
    public function  index(){
@@ -24,7 +25,7 @@ class ImportExcelOrphansController extends Controller
            ]
        );
        if(!$validator->passes()){
-           return response()->json(['code'=>0,'error'=>$validator->errors()->toArray(), 'msg'=>'فشلت عملية اضافة ملف الأيتام ']);
+           return response()->json(['code'=>0,'error'=>$validator->errors()->toArray(), 'msg'=>'فشلت عملية إضافة أيتام ']);
        }
        else{
            $dataTime = date('Ymd_His');
@@ -36,28 +37,94 @@ class ImportExcelOrphansController extends Controller
            $excel->load($savePath.$fileName);
            $collection = $excel->getCollection();
            if(is_array($collection[1]) && sizeof($collection[1]) == 22){
-               $errors=[];
-               $rows_error =0;
+                    $errors =[];
+                    $countAllOrphan = sizeof($collection)-1;
+                    $countAddedOrphan = 0;
+                    $countCancelOrphan = 0;
+                    $countUpdateOrphan = 0;
                for($row=1; $row<sizeof($collection); $row++){
+                   $status = true;
                    try{
+                       $validator = Validator::make($collection[$row], [
+                           '1' => 'required',
+                           '2' => 'required',
+                           '3' => 'required',
+                           '4' => 'required|numeric|min:100000000|max:999999999',
+                           '5' => 'required',
+                           '6' => 'required',
+                           '7' => 'required|numeric|min:100000000|max:999999999',
+                           '8' => 'required|numeric|min:0560000000|max:0599999999',
+                           '9' => 'required|numeric|min:1000000|max:9999999',
+                           '10' => 'required',
+                           '11' => 'required',
+                           '12' => 'required',
+                           '13' => 'required|date',
+                           '14' => 'required',
+                           '15' => 'required',
+                           '16' => 'required|numeric|min:100000000|max:999999999',
+                           '17' => 'required',
+                           '18' => 'required',
+                           '19' => 'required|date',
+                           '20'=> '',
+                           '21' => 'date',
+                           '22' => 'date',
+                       ],
+                           [
+                               '1.required'=> 'اسم اليتيم مطلوب.',
+                               '2.required'=>'اسم الأم مطلوب.',
+                               '3.required'=>'رقم هوية  الأم مطلوبة.',
+                               '3.max'=>'رقم هوية الأم غير صحيح يجب أن يتكون من 9 أرقام.',
+                               '3.min'=>'رقم هوية الأم غير صحيح يجب أن يتكون من 9 أرقام.',
+                               '3.numeric'=>'رقم هوية الأم غير صحيح يجب أن يتكون من 9 أرقام.',
+                               '4.required'=>'اسم المعيل مطلوب.',
+                               '5.required'=>'صلة القرابة مطلوبة.',
+                               '6.required'=>'رقم هوية  المعيل مطلوبة.',
+                               '6.max'=>'رقم هوية المعيل غير صحيح يجب أن يتكون من 9 أرقام.',
+                               '6.min'=>'رقم هوية المعيل غير صحيح يجب أن يتكون من 9 أرقام.',
+                               '6.numeric'=>'رقم هوية المعيل غير صحيح يجب أن يتكون من 9 أرقم.',
+                               '7.required'=>'رقم الجوال مطلوب.',
+                               '7.max'=>' رقم الجوال غير صحيح يجب أن يتكون من 9 أرقام(594875451).',
+                               '7.min'=>'رقم الجوال غير صحيح يجب أن يتكون من 9 أرقام(594875451).',
+                               '7.numeric'=>'رقم الجوال غير صحيح يجب أن يتكون من 9 أرقام(594875451).',
+                               '8.required'=>'رقم الحساب مطلوب.',
+                               '8.max'=>' رقم الحساب غير صحيح يجب أن يتكون من 7 أرقام(1234567).',
+                               '8.min'=>'رقم الحساب غير صحيح يجب أن يتكون من 7 أرقام(1234567).',
+                               '8.numeric'=>'رقم الحساب غير صحيح يجب أن يتكون من 7 أرقام(1234567).',
+                               '9.required'=>'العنوان مطلوب.',
+                               '10.required'=>'المرحلة الدراسية مطلوبة.',
+                               '11.required'=>'نوع الكفالة مطلوبة.',
+                               '12.required'=>'تاريخ ميلاد اليتيم مطلوب.',
+                               '12.date'=>'تاريخ ميلاد غير صحيح.',
+                               '13.required'=>'الحالة الصحية لليتيم مطلوبة.',
+                               '14.required'=>'نوع المرض أو الاعاقة لليتيم مطلوبة.',
+                               '15.required'=>'رقم هوية  اليتيم مطلوبة.',
+                               '15.max'=>'رقم هوية اليتيم غير صحيح يجب أن يتكون من 9 أرقام.',
+                               '15.min'=>'رقم هوية اليتيم غير صحيح يجب أن يتكون من 9 أرقام.',
+                               '15.numeric'=>'رقم هوية اليتيم غير صحيح يجب أن يتكون من 9 أرقم.',
+                               '16.required'=>'مستوى التحصيل العلمي لليتيم مطلوب.',
+                               '17.required'=>'جنس اليتيم مطلوب.',
+                               '18.required'=>'تاريخ وفاة الأب  مطلوب.',
+                               '18.date'=>'تاريخ وفاة الأب  غير صحيح.',
+                               '19.required'=>'سبب وفاة الأب  مطلوبة.',
+                               '20.date'=>'تاريخ التسويق غير صحيح.',
+                               '21.date'=>'تاريخ الكفالة غير صحيح.',
 
 
-                       $status = true;
 
-                        for($i=0; $i<sizeof($collection[$row]); $i++){
-                                if($collection[$row][$i] == ''){
-                                    $errors[$i] =[];
-                                    $errors[$i]['row'] = $row;
-                                    $errors[$i]['column'] = $collection[0][$i];
-                                    $errors[$i]['msg'] = 'لا تحتوي على بيانات';
-                                    $status = false;
-                                }
-                           }
+                           ]
+                       );
+                       if(!$validator->passes()){
+                           $errors[$row] = $validator->errors()->toArray();
+                           ++$countCancelOrphan;
+                           $status = false;
+                       }
                        if($status){
                            $orphan = new Orphan();
                            if(Orphan::all()->where('orphanIdentity','=',$collection[$row][15])->count() == 1) {
                                $orphan = Orphan::all()->where('orphanIdentity', '=', $collection[$row][15])->first();
+                               ++$countUpdateOrphan;
                            }
+
                            $orphan->orphanNumber = $collection[$row][0];
                            $orphan->orphanName = $collection[$row][1];
                            $orphan->mothersName = $collection[$row][2];
@@ -85,26 +152,44 @@ class ImportExcelOrphansController extends Controller
                            $orphan->marketingDate = $collection[$row][20];
                            $orphan->guarantyDate = $collection[$row][21];
                            $orphan->user_id = auth()->user()->id;
-                           $orphan->save();
-                       }else{
-                           ++$rows_error;
+                           $query = $orphan->save();
+                           if($query){
+                               ++$countAddedOrphan;
+                           }
                        }
                    }catch(\Exception $e){
+                       File::delete($savePath.$fileName);
                        return response()
                            ->json(['code'=>0,'errors'=>[$e->getMessage()]]);
                    }
 
                }
-               $msg = sizeof($collection)-1-$rows_error ;
-               return response()->json(['code'=>-1, 'errors'=>$errors,  'msg' => $msg]);
+               $listErrors = ImportExcelOrphansController::listErrors($errors);
+               $msg = "تمت عملية إضافة الأيتام بنجاح، عدد الأيتام الكلي :".$countAllOrphan." ، عدد الأيتام التي تم إضافتها :".$countAddedOrphan." ،عدد الأيتام التي لم يتم إضافتها :".$countCancelOrphan." ، عدد الأيتام التي تم تعديل بياناتها وهي موجودة مسبقا :".$countUpdateOrphan.".";
+               File::delete($savePath.$fileName);
+               return response()->json(['code'=>1, 'errors'=>$listErrors,  'msg' => $msg]);
 
            }else{
+               File::delete($savePath.$fileName);
                return response()->json(['code'=>0 ,'msg'=> 'الملف المرفق غير مطابق. استخدم كما في المثال !']);
            }
-           File::delete($savePath.$fileName);
-           return response()->json(['code'=>1,'msg'=>'تم اضافة اأيتام بنجاح !', 'orphans'=>Orphan::all()]);
 
        }
    }
+ public  function  listErrors($errors){
+       $list ='';
+       foreach ($errors as $key=> $errors_row){
+           $list.='<li><span style="color:red">اليتيم رقم '.$key.'</span>';
+           $list.='<ul style=" list-style-type:disc;">';
+           foreach ($errors_row as $error_column){
+               foreach ($error_column as $error) {
+                   $list .= '<li><span style="color:red">'.$error. '</span></li>';
+               }
+           }
+           $list.='</ul></li>';
+       }
 
+    return $list;
+
+ }
 }

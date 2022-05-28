@@ -131,48 +131,52 @@ class OrphanController extends Controller
             'causeOfDeath' => 'required:string',
             'status' => 'required:string'
         ];
-        $masseges = [];
+        $masseges = [''=>'',];
         $validator = Validator::make($request->all(), $rules, $masseges);
         if ($validator->fails()) {
-            return redirect()->back()->withInput()->withErrors($validator->errors());
+            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray(),'msg'=>'فشلت عملية إضافة يتيم جديد']);
         }
-        $orphan = new Orphan();
-        $orphan->orphanNumber = $request->orphanNumber;
-        $orphan->orphanName = $request->orphanName;
-        $orphan->mothersName = $request->mothersName;
-        $orphan->mothersIdentity = $request->mothersIdentity;
-        $orphan->breadwinnerName = $request->breadwinnerName;
-        $orphan->relativeRelation = $request->relativeRelation;
-        $orphan->breadwinnerIdentity = $request->breadwinnerIdentity;
-        $orphan->phoneNumber = $request->phoneNumber;
-        $orphan->accountNumber = $request->accountNumber;
-        $orphan->address = $request->address;
-        $orphan->educationalLevel = $request->educationalLevel;
-        $orphan->guarantyType = $request->guarantyType;
-        $orphan->dob = $request->dob;
-        $orphan->healthStatus = $request->healthStatus;
-        $orphan->disease = $request->disease;
-        $orphan->orphanIdentity = $request->orphanIdentity;
-        $orphan->educationalAttainmentLevel = $request->educationalAttainmentLevel;
-        if ($request->gender == "male") {
-            $orphan->gender = 0;
-        } else {
-            $orphan->gender = 1;
-        }
-        $orphan->fathersDeathDate = $request->fathersDeathDate;
-        $orphan->causeOfDeath = $request->causeOfDeath;
-        $orphan->marketingDate = $request->marketingDate;
-        $orphan->guarantyDate = $request->guarantyDate;
-        if($request->status == "marketing"){
-            $orphan->status = 0;
-        }else{
-            $orphan->status = 1;
-        }
-        $orphan->user_id = auth()->user()->id;
-        if ($orphan->save()) {
-            return redirect()->back()->with(['success' => 'تمت عملية إضافة يتيم بنجاح !']);
-        } else {
-            return redirect()->back()->with(['error' => 'فشلت عملية إضافة يتيم !']);
+        else {
+            $orphan = new Orphan();
+            $orphan->orphanNumber = $request->orphanNumber;
+            $orphan->orphanName = $request->orphanName;
+            $orphan->mothersName = $request->mothersName;
+            $orphan->mothersIdentity = $request->mothersIdentity;
+            $orphan->breadwinnerName = $request->breadwinnerName;
+            $orphan->relativeRelation = $request->relativeRelation;
+            $orphan->breadwinnerIdentity = $request->breadwinnerIdentity;
+            $orphan->phoneNumber = $request->phoneNumber;
+            $orphan->accountNumber = $request->accountNumber;
+            $orphan->address = $request->address;
+            $orphan->educationalLevel = $request->educationalLevel;
+            $orphan->guarantyType = $request->guarantyType;
+            $orphan->dob = $request->dob;
+            $orphan->healthStatus = $request->healthStatus;
+            $orphan->disease = $request->disease;
+            $orphan->orphanIdentity = $request->orphanIdentity;
+            $orphan->educationalAttainmentLevel = $request->educationalAttainmentLevel;
+            if ($request->gender == "male") {
+                $orphan->gender = 0;
+            } else {
+                $orphan->gender = 1;
+            }
+            $orphan->fathersDeathDate = $request->fathersDeathDate;
+            $orphan->causeOfDeath = $request->causeOfDeath;
+            $orphan->marketingDate = $request->marketingDate;
+            $orphan->guarantyDate = $request->guarantyDate;
+            if ($request->status == "marketing") {
+                $orphan->status = 0;
+            } else {
+                $orphan->status = 1;
+            }
+            $orphan->user_id = auth()->user()->id;
+            $query = $orphan->save();
+
+            if(!$query){
+                return response()->json(['code'=>0,'msg'=>'فشلت عملية إضافة يتيم جديد']);
+            }else{
+                return response()->json(['code'=>1,'msg'=>'تم إضافة يتيم حديد بنجاح']);
+            }
         }
     }
     public function update(Request $request)

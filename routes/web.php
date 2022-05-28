@@ -51,7 +51,7 @@ Route::middleware('auth')->group(function () {
     });
     Route::prefix('users')->group(function (){
         Route::get('/','User\UserController@index')->name('users.list');
-        Route::post('/add-user','User\UserController@addUser')->name('add.user');
+        Route::post('/add-user','User\UserController@store')->name('add.user');
         Route::get('/getUsersList','User\UserController@getUsersList')->name('get.users.list');
         Route::post('/getUserDetails','User\UserController@getUserDetails')->name('get.user.details');
         Route::post('/updateUserDetails','User\UserController@updateUserDetails')->name('update.user.details');
