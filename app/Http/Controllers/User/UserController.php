@@ -16,21 +16,29 @@ class UserController extends Controller
         $roles = Role::all();
         return view('user/index',compact(['roles']));
     }
-
     //ADD NEW User
     public function store(Request $request){
         $validator = \Validator::make($request->all(),[
             'user_name'=>'required|unique:users',
             'name'=>'required',
-            'phone_number'=>'required|unique:users',
+            'phone_number'=>'required|digits:10|unique:users',
             'password'=>'required',
             'role_name'=>'required',
+        ],
+            [
+                'user_name.required' => 'اسم المستخدم مطلوب.',
+                'user_name.unique' => 'اسم المستخدم موجود مسبقا.',
+                'name.required' => 'الاسم مطلوب.',
+                'phone_number.required' => 'رقم الجوال مطلوب.',
+                'phone_number.unique' => 'رقم الجوال مستخدم مسبقا.',
+                'phone_number.digits' => 'يجب أن يكون رقم الجوال مكون من 10 أرقام فقط (0594785414)',
+                'password.required' => 'كلمة السر مطلوبة',
+                'role_name.required' => 'اسم المنصب مطلوب',
 
-
-        ]);
+            ]);
 
         if(!$validator->passes()){
-            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
+            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray(), 'msg'=>'فشلت عملية اضافة مستخدم.']);
         }else{
             $user = new User();
             $user->name = $request->name;
@@ -82,20 +90,31 @@ class UserController extends Controller
     }
 
     //UPDATE User DETAILS
-    public function updateUserDetails(Request $request){
+    public function update(Request $request){
         $user_id = $request->id;
 
         $validator = \Validator::make($request->all(),[
             'user_name'=>'required|unique:users,user_name,'.$user_id,
             'name'=>'required',
-            'phone_number'=>'required|unique:users,phone_number,'.$user_id,
+            'phone_number'=>'required|digits:10|unique:users,phone_number,'.$user_id,
             'role_name'=>'required',
 
 
-        ]);
+        ],
+            [
+                'user_name.required' => 'اسم المستخدم مطلوب.',
+                'user_name.unique' => 'اسم المستخدم موجود مسبقا.',
+                'name.required' => 'الاسم مطلوب.',
+                'phone_number.required' => 'رقم الجوال مطلوب.',
+                'phone_number.unique' => 'رقم الجوال مستخدم مسبقا.',
+                'phone_number.digits' => 'يجب أن يكون رقم الجوال مكون من 10 أرقام فقط (0594785414)',
+                'password.required' => 'كلمة السر مطلوبة',
+                'role_name.required' => 'اسم المنصب مطلوب',
+
+            ]);
 
         if(!$validator->passes()){
-            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
+            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray(), 'msg'=>'فشلت عملية تحديث مستخدم']);
         }else{
 
             $user = User::find($user_id);

@@ -13,16 +13,23 @@ use DataTables;
 class ImageGalleryController extends Controller
 {
     //ADD NEW Image
-    public function addImage(Request $request){
+    public function store(Request $request){
         $rules = [
             'orphan_id' => 'required|unique:orphans,id,'.$request->orphan_id,
             'type_image' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
-        $validator = \Validator::make($request->all(),$rules);
+        $messages =[
+            'orphan_id.required' => 'رقم الصورة مطلوب.',
+            'type_image.required' => 'نوع الصورة مطلوبة.',
+            'image.image' => 'يجب أن ترفع صورة.',
+            'image.mimes' => 'يجب أن تكون الصورة من إحدى هذه الصيغ(jpeg,png,jpg,gif,svg).',
+            'image.max' => 'حجم الصورة لا يزيد عن 2 ميجا.',
+        ];
+        $validator = \Validator::make($request->all(),$rules,$messages);
 
         if(!$validator->passes()){
-            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
+            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray(), 'msg'=>'فشلت عملية إضافة صورة.']);
         }
         if($request->hasFile('image')){
             $path = time().'.'.$request->image->getClientOriginalExtension();
@@ -36,12 +43,12 @@ class ImageGalleryController extends Controller
                 $image->user_id = auth()->user()->id;
                 $query = $image->save();
                 if ($query) {
-                    return response()->json(['code' => 1,'msg' => 'تم اضافة صورة بنجاح']);
+                    return response()->json(['code' => 1,'msg' => 'تم اضافة صورة بنجاح.']);
                 }
             }
 
         }
-        return response()->json(['code' => 0,'msg' => 'هناك خطأ ما']);
+        return response()->json(['code' => 0,'msg' => 'فشلت عملية إضافة صورة.']);
     }
     // GET ALL Images
     public function getImagesList(Request $request){
@@ -75,22 +82,29 @@ class ImageGalleryController extends Controller
             return response()->json(['code'=>1, 'id'=> $image_id,'type_image'=>$image->typeImage->type]);
         }
 
-        return response()->json(['code'=>0, 'msg'=>'هناك خطأ ما']);
+        return response()->json(['code'=>0, 'msg'=>'فشل الحصول على بيانات الصورة.']);
 
     }
 
     //UPDATE Image DETAILS
-    public function updateImageDetails(Request $request){
+    public function update(Request $request){
         $image_id = $request->id;
         $rules = [
             'id' => 'required',
             'type_image' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
-        $validator = \Validator::make($request->all(),$rules);
+        $messages =[
+            'id.required' => 'رقم الصورة مطلوب.',
+            'type_image.required' => 'نوع الصورة مطلوبة.',
+            'image.image' => 'يجب أن ترفع صورة.',
+            'image.mimes' => 'يجب أن تكون الصورة من إحدى هذه الصيغ(jpeg,png,jpg,gif,svg).',
+            'image.max' => 'حجم الصورة لا يزيد عن 2 ميجا.',
+        ];
+        $validator = \Validator::make($request->all(),$rules,$messages);
 
         if(!$validator->passes()){
-            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
+            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray(), 'msg'=>'فشلت عملية تحديث الصورة.']);
         }
         $image = ImageGallery::all()->find($image_id);
         if($image){
@@ -103,34 +117,32 @@ class ImageGalleryController extends Controller
                 $path = time().'.'.$request->image->getClientOriginalExtension();
                 $request->image->move(public_path('images'), $path);
                 $image->path = $path;
-                $image->user_id = auth()->user()->id;
+
             }
+            $image->user_id = auth()->user()->id;
             $query = $image->save();
             if ($query) {
-                return response()->json(['code' => 1,'msg' => 'تم تحديث الصورة']);
+                return response()->json(['code' => 1,'msg' => 'تم تحديث الصورة.']);
             }
         }
 
-        return response()->json(['code' => 0,'msg' => 'هناك خطأ ما']);
+        return response()->json(['code' => 0,'msg' => 'فشلت عملية تحديث الصورة']);
     }
-
     // DELETE Image RECORD
     public function deleteImage(Request $request){
         $image_id = $request->image_id;
         $query = ImageGallery::find($image_id)->delete();
 
         if($query){
-            return response()->json(['code'=>1, 'msg'=>'تم حذف الصورة بنجاح']);
+            return response()->json(['code'=>1, 'msg'=>'تم حذف الصورة بنجاح.']);
         }else{
-            return response()->json(['code'=>0, 'msg'=>'هناك خطأ ما']);
+            return response()->json(['code'=>0, 'msg'=>'فشلت عملية حذف الصورة.']);
         }
     }
-
-
     public function deleteSelectedImages(Request $request){
         $image_ids = $request->image_ids;
         ImageGallery::whereIn('id', $image_ids)->delete();
-        return response()->json(['code'=>1, 'msg'=>'تم حذف الصور بنجاح']);
+        return response()->json(['code'=>1, 'msg'=>'تم حذف الصور بنجاح.']);
     }
 
 

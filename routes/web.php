@@ -25,10 +25,10 @@ Route::middleware('auth')->group(function () {
         Route::post('/deleteOrphan','Orphan\OrphanController@deleteOrphan')->name('delete.orphan');
         Route::post('/deleteSelectedOrphan','Orphan\OrphanController@deleteSelectedOrphans')->name('delete.selected.orphans');
         //image gallery for orphan
-        Route::post('/add-image','Orphan\ImageGalleryController@addImage')->name('add.image');
+        Route::post('/add-image','Orphan\ImageGalleryController@store')->name('add.image');
         Route::get('/getImagesList/{id}','Orphan\ImageGalleryController@getImagesList')->name('get.images.list');
         Route::post('/getImageDetails','Orphan\ImageGalleryController@getImageDetails')->name('get.image.details');
-        Route::post('/updateImageDetails','Orphan\ImageGalleryController@updateImageDetails')->name('update.image.details');
+        Route::post('/updateImageDetails','Orphan\ImageGalleryController@update')->name('update.image.details');
         Route::post('/deleteImage','Orphan\ImageGalleryController@deleteImage')->name('delete.image');
         Route::post('/deleteSelectedImages','Orphan\ImageGalleryController@deleteSelectedImages')->name('delete.selected.images');
         Route::prefix('import')->group(function (){
@@ -41,10 +41,10 @@ Route::middleware('auth')->group(function () {
     });
     Route::prefix('roles')->group(function (){
         Route::get('/','User\RoleController@index')->name('roles.list');
-        Route::post('/add-role','User\RoleController@addRole')->name('add.role');
+        Route::post('/add-role','User\RoleController@store')->name('add.role');
         Route::get('/getRolesList','User\RoleController@getRolesList')->name('get.roles.list');
         Route::post('/getRoleDetails','User\RoleController@getRoleDetails')->name('get.role.details');
-        Route::post('/updateRoleDetails','User\RoleController@updateRoleDetails')->name('update.role.details');
+        Route::post('/updateRoleDetails','User\RoleController@update')->name('update.role.details');
         Route::post('/deleteRole','User\RoleController@deleteRole')->name('delete.role');
         Route::post('/deleteSelectedRoles','User\RoleController@deleteSelectedRoles')->name('delete.selected.roles');
 
@@ -54,7 +54,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/add-user','User\UserController@store')->name('add.user');
         Route::get('/getUsersList','User\UserController@getUsersList')->name('get.users.list');
         Route::post('/getUserDetails','User\UserController@getUserDetails')->name('get.user.details');
-        Route::post('/updateUserDetails','User\UserController@updateUserDetails')->name('update.user.details');
+        Route::post('/updateUserDetails','User\UserController@update')->name('update.user.details');
         Route::post('/deleteUser','User\UserController@deleteUser')->name('delete.user');
         Route::post('/deleteSelectedUsers','User\UserController@deleteSelectedUsers')->name('delete.selected.users');
 

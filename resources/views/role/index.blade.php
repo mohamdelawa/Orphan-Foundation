@@ -1,20 +1,17 @@
 @extends('layout.app')
-@section('title')
-    Roles
-@endsection
 @section('padding page')
         <div class="container">
             <div class="row" style="margin-top: 45px">
                 <div class="col-md-8">
                     <div class="card">
-                        <div class="card-header">Roles</div>
-                        <div class="card-body">
-                            <table class="table table-hover table-condensed" id="roles-table">
+                        <div class="card-header" style="text-align: right;">المناصب</div>
+                        <div class="card-body table-responsive" style="text-align: right">
+                            <table class="table table-hover table-condensed" id="roles-table" style="direction: rtl; text-align: center">
                                 <thead>
-                                <th><input type="checkbox" name="main_checkbox"><label></label></th>
-                                <th>#</th>
-                                <th>name</th>
-                                <th>Actions <button class="btn btn-sm btn-danger d-none" id="deleteAllBtn">Delete All</button></th>
+                                <th style="text-align: center"><input type="checkbox" name="main_checkbox"><label></label></th>
+                                <th style="text-align: center">#</th>
+                                <th style="text-align: center">اسم المنصب</th>
+                                <th style="text-align: center"> <button class="btn btn-sm btn-danger d-none" id="deleteAllBtn">حذف الكل</button></th>
                                 </thead>
                                 <tbody></tbody>
                             </table>
@@ -22,18 +19,18 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-header">Add new Role</div>
+                    <div class="card" style="text-align: right;">
+                        <div class="card-header">اضافة منصب جديد</div>
                         <div class="card-body">
                             <form action="{{ route('add.role') }}" method="post" id="add-role-form" autocomplete="off">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="">Role name</label>
-                                    <input type="text" class="form-control" name="name" placeholder="Enter role name">
+                                    <label for="">اسم المنصب</label>
+                                    <input type="text" class="form-control" style="direction: rtl" name="name" placeholder="اسم المنصب">
                                     <span class="text-danger error-text name_error"></span>
                                 </div>
                                 <div class="form-group">
-                                    <button type="submit" class="btn btn-block btn-success">SAVE</button>
+                                    <button type="submit" class="btn btn-block btn-primary">حفظ</button>
                                 </div>
                             </form>
                         </div>
@@ -75,6 +72,7 @@
                             $.each(data.error, function(prefix, val){
                                 $(form).find('span.'+prefix+'_error').text(val[0]);
                             });
+                            toastr.error(data.msg);
                         }else{
                             $(form)[0].reset();
                             //  alert(data.msg);
@@ -110,9 +108,10 @@
                 $('.editRole').find('form')[0].reset();
                 $('.editRole').find('span.error-text').text('');
                 $.post('<?= route("get.role.details") ?>',{role_id:role_id}, function(data){
-                    $('.editRole').find('input[name="id"]').val(data.details.id);
-                    $('.editRole').find('input[name="name"]').val(data.details.name);
-                    $('.editRole').modal('show');
+                        $('.editRole').find('input[name="id"]').val(data.details.id);
+                        $('.editRole').find('input[name="name"]').val(data.details.name);
+                        $('.editRole').modal('show');
+
                 },'json');
             });
             //UPDATE ROLE DETAILS
@@ -134,6 +133,7 @@
                             $.each(data.error, function(prefix, val){
                                 $(form).find('span.'+prefix+'_error').text(val[0]);
                             });
+                            toastr.error(data.msg);
                         }else{
                             $('#roles-table').DataTable().ajax.reload(null, false);
                             $('.editRole').modal('hide');

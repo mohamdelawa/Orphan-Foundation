@@ -24,11 +24,9 @@
                       <div class="form-group">
                               <label for="image" ><b> أضف صورة</b></label>
                               <div class="custom-file form-control " id="image">
-                                  <input type="file" class="custom-file-input @error('image') is-valid @enderror " id="customFile" name="image" >
+                                  <input type="file" class="custom-file-input " id="customFile" name="image" >
                                   <label class="custom-file-label " for="customFile" style="text-align: left">Choose file</label>
-                                  @error('image')
-                                  <div class="alert alert-danger">{{ $message }}</div>
-                                  @enderror
+                                  <span class="text-danger error-text image_error"></span>
                               </div>
                           <script>
                               // Add the following code if you want the name of the file appear on select
@@ -41,7 +39,7 @@
                       </div>
 
                       <div class="form-group">
-                          <button type="submit" class="btn btn-block btn-success">حفظ</button>
+                          <button type="submit" class="btn btn-block btn-primary">حفظ</button>
                       </div>
 
                   </form>

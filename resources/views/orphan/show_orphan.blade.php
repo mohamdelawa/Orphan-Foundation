@@ -1,7 +1,4 @@
 @extends('layout.app')
-@section('title')
-    عرض يتيم
-@endsection
 @section('css')
     <style>
         .image-gallery{
@@ -14,10 +11,7 @@
 @section('padding page')
     <div class="container" style="margin-top: 50px; text-align: right" >
         <div class="row" >
-            @include('massege')
-        </div>
-        <div class="row" >
-            <form class="form-group col-md-12"  method="POST" action="{{route('update.orphan',['id'=>$orphan->id])}}" enctype="multipart/form-data">
+            <form id="update-orphan-form" class="form-group col-md-12"  method="POST" action="{{route('update.orphan',['id'=>$orphan->id])}}" enctype="multipart/form-data">
                 @csrf
                 <div class="card " style="direction: rtl">
                     <div class="card-header">
@@ -28,182 +22,137 @@
                             <div class="col-md-9" >
                                 <div class="form-group row">
                                     <label for="orphanNumber " class="col-md-2"><b>رقم اليتيم </b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2  @error('orphanNumber') is-invalid @enderror " required id="orphanNumber" name="orphanNumber" value="{{$orphan->orphanNumber}}">
-                                    @error('orphanNumber')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3 "  id="orphanNumber" name="orphanNumber" value="{{$orphan->orphanNumber}}" >
+                                    <span class="text-danger error-text col-md-6 orphanNumber_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="orphanName" class="col-md-2"><b>اسم اليتيم </b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2 @error('orphanName') is-invalid @enderror " required id="orphanName" name="orphanName" value="{{$orphan->orphanName}}">
-                                    @error('orphanName')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3 " required id="orphanName" name="orphanName" value="{{$orphan->orphanName}}" >
+                                    <span class="text-danger error-text col-md-6 orphanName_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="orphanIdentity" class="col-md-2"><b>رقم هوية اليتيم </b><span style="color: red">*</span></label>
-                                    <input type="number" class="form-control col-md-6 mr-md-2 @error('orphanIdentity') is-invalid @enderror " required id="orphanIdentity" name="orphanIdentity" value="{{$orphan->orphanIdentity}}">
-                                    @error('orphanIdentity')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="number" class="form-control col-md-5 mr-md-3 " required id="orphanIdentity" name="orphanIdentity" value="{{$orphan->orphanIdentity}}" >
+                                    <span class="text-danger error-text col-md-6 orphanIdentity_error"></span>
+
                                 </div>
                                 <div class="form-group row">
                                     <label for="dob" class="col-md-2" ><b>تاريخ ميلاد اليتيم</b><span style="color: red">*</span></label>
-                                    <input type="date" class="form-control col-md-6 mr-md-2 @error('dob') is-invalid @enderror" required id="dob" name="dob" value="{{$orphan->dob}}">
-                                    @error('dob')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="date" class="form-control col-md-5 mr-md-3 " required id="dob" name="dob" value="{{$orphan->dob}}" >
+                                    <span class="text-danger error-text col-md-6 dob_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="gender" class="col-md-2"><b>الجنس</b><span style="color: red">*</span></label>
                                     <div class="col-md-5">
                                         <div class="custom-control custom-radio custom-control-inline">
                                             <input type="radio" class="custom-control-input" id="male" name="gender" value="male" checked  >
-                                            <label class="custom-control-label @error('gender') is-invalid @enderror" for="male">ذكر</label>
+                                            <label class="custom-control-label" for="male">ذكر</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input" id="female" @if($orphan->gender) checked @endif name="gender" value="female" >
+                                            <input type="radio" class="custom-control-input" id="female" @if($orphan->gender=='female') checked @endif name="gender" value="female" >
                                             <label class="custom-control-label" for="female">أنثى</label>
                                         </div>
                                     </div>
-                                    @error('gender')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <span class="text-danger error-text col-md-6 gender_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="mothersIdentity" class="col-md-2"><b>رقم هوية الأم</b><span style="color: red">*</span></label>
-                                    <input type="number" class="form-control col-md-6 mr-md-2 @error('mothersIdentity') is-invalid @enderror" required id="mothersIdentity" name="mothersIdentity" value="{{$orphan->mothersIdentity}}" >
-                                    @error('mothersIdentity')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="number" class="form-control col-md-5 mr-md-3 " required id="mothersIdentity" name="mothersIdentity" value="{{$orphan->mothersIdentity}}" >
+                                    <span class="text-danger error-text col-md-6 mothersIdentity_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="mothersName" class="col-md-2"><b>اسم الأم</b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2 @error('mothersName') is-invalid @enderror" required id="mothersName" name="mothersName" value="{{$orphan->mothersName}}" >
-                                    @error('mothersName')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3" required id="mothersName" name="mothersName" value="{{$orphan->mothersName}}" >
+                                    <span class="text-danger error-text col-md-6 mothersName_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="breadwinnerName" class="col-md-2"><b>اسم المعيل</b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2 @error('breadwinnerName') is-invalid @enderror" required id="breadwinnerName" name="breadwinnerName" value="{{$orphan->breadwinnerName}}">
-                                    @error('breadwinnerName')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3 " required id="breadwinnerName" name="breadwinnerName" value="{{$orphan->breadwinnerName}}" >
+                                    <span class="text-danger error-text col-md-6 breadwinnerName_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="breadwinnerIdentity" class="col-md-2"><b>رقم هوية المعيل</b><span style="color: red">*</span></label>
-                                    <input type="number" class="form-control col-md-6 mr-md-2 @error('breadwinnerIdentity') is-invalid @enderror" required id="breadwinnerIdentity" name="breadwinnerIdentity" value="{{$orphan->breadwinnerIdentity}}">
-                                    @error('breadwinnerIdentity')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="number" class="form-control col-md-5 mr-md-3 " required id="breadwinnerIdentity" name="breadwinnerIdentity"  value="{{$orphan->breadwinnerIdentity}}">
+                                    <span class="text-danger error-text col-md-6 breadwinnerIdentity_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="relativeRelation" class="col-md-2"><b>صلة قرابة المعيل</b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2 @error('relativeRelation') is-invalid @enderror" required id="relativeRelation" name="relativeRelation" value="{{$orphan->relativeRelation}}">
-                                    @error('relativeRelation')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3" required id="relativeRelation" name="relativeRelation" value="{{$orphan->relativeRelation}}">
+                                    <span class="text-danger error-text col-md-6 relativeRelation_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="address" class="col-md-2"><b>عنوان </b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2 @error('address') is-invalid @enderror" required id="address" name="address" value="{{$orphan->address}}" >
-                                    @error('address')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3" required id="address" name="address"  value="{{$orphan->address}}">
+                                    <span class="text-danger error-text col-md-6 address_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="phoneNumber" class="col-md-2"><b>رقم الجوال</b><span style="color: red">*</span></label>
-                                    <input type="number" class="form-control col-md-6 mr-md-2 @error('phoneNumber') is-invalid @enderror" required id="phoneNumber" name="phoneNumber" value="{{$orphan->phoneNumber}}">
-                                    @error('phoneNumber')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="number" class="form-control col-md-5 mr-md-3 " required id="phoneNumber" name="phoneNumber" value="{{$orphan->phoneNumber}}">
+                                    <span class="text-danger error-text col-md-6 phoneNumber_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="accountNumber" class="col-md-2"><b>رقم الحساب</b><span style="color: red">*</span></label>
-                                    <input type="number" class="form-control col-md-6 mr-md-2 @error('accountNumber') is-invalid @enderror" required id="accountNumber" name="accountNumber" value="{{$orphan->accountNumber}}">
-                                    @error('accountNumber')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="number" class="form-control col-md-5 mr-md-3 " required id="accountNumber" name="accountNumber" value="{{$orphan->accountNumber}}" >
+                                    <span class="text-danger error-text col-md-6 accountNumber_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="educationalLevel" class="col-md-2"><b>المرحلة الدراسية</b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2 @error('educationalLevel') is-invalid @enderror" required id="educationalLevel" name="educationalLevel" value="{{$orphan->educationalLevel}}">
-                                    @error('educationalLevel')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3 " required id="educationalLevel" name="educationalLevel" value="{{$orphan->educationalLevel}}">
+                                    <span class="text-danger error-text col-md-6 educationalLevel_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="guarantyType" class="col-md-2"><b>نوع الكفالة </b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2 @error('guarantyType') is-invalid @enderror" required id="guarantyType" name="guarantyType" value="{{$orphan->guarantyType}}">
-                                    @error('guarantyType')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3" required id="guarantyType" name="guarantyType" value="{{$orphan->guarantyType}}" >
+                                    <span class="text-danger error-text col-md-6 guarantyType_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="healthStatus" class="col-md-2"><b> الحالة الصحية </b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2 @error('healthStatus') is-invalid @enderror" required id="healthStatus" name="healthStatus" value="{{$orphan->healthStatus}}">
-                                    @error('healthStatus')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3 " required id="healthStatus" name="healthStatus" value="{{$orphan->healthStatus}}">
+                                    <span class="text-danger error-text col-md-6 healthStatus_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="disease" class="col-md-2"><b> نوع المرض أو الإاقة</b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2 @error('disease') is-invalid @enderror" required id="disease" name="disease" value="{{$orphan->disease}}">
-                                    @error('disease')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3 " required id="disease" name="disease" value="{{$orphan->healthStatus}}" >
+                                    <span class="text-danger error-text col-md-6 disease_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="educationalAttainmentLevel" class="col-md-2"><b>مستوى التحصيل العلمي</b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2 @error('educationalAttainmentLevel') is-invalid @enderror" required id="educationalAttainmentLevel" name="educationalAttainmentLevel" value="{{$orphan->educationalAttainmentLevel}}">
-                                    @error('educationalAttainmentLevel')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3 " required id="educationalAttainmentLevel" name="educationalAttainmentLevel" value="{{$orphan->educationalAttainmentLevel}}">
+                                    <span class="text-danger error-text col-md-6 educationalAttainmentLevel_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="fathersDeathDate" class="col-md-2"><b>تاريخ الوفاة</b><span style="color: red">*</span></label>
-                                    <input type="date" class="form-control col-md-6 mr-md-2 @error('fathersDeathDate') is-invalid @enderror" required id="fathersDeathDate" name="fathersDeathDate" value="{{$orphan->fathersDeathDate}}">
-                                    @error('fathersDeathDate')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="date" class="form-control col-md-5 mr-md-3 " required id="fathersDeathDate" name="fathersDeathDate" value="{{$orphan->fathersDeathDate}}">
+                                    <span class="text-danger error-text col-md-6 fathersDeathDate_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="causeOfDeath" class="col-md-2"><b>سبب الوفاة</b><span style="color: red">*</span></label>
-                                    <input type="text" class="form-control col-md-6 mr-md-2 @error('causeOfDeath') is-invalid @enderror" required id="causeOfDeath" name="causeOfDeath" value="{{$orphan->causeOfDeath}}">
-                                    @error('causeOfDeath')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="text" class="form-control col-md-5 mr-md-3 " required id="causeOfDeath" name="causeOfDeath" value="{{$orphan->causeOfDeath}}">
+                                    <span class="text-danger error-text col-md-6 causeOfDeath_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="status" class="col-md-2"><b>الحالة</b><span style="color: red">*</span></label>
                                     <div class="col-md-5">
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input @error('status') is-invalid @enderror" checked id="marketing" name="status" value="marketing"  >
+                                            <input type="radio" class="custom-control-input" checked id="marketing" name="status" value="marketing"  >
                                             <label class="custom-control-label" for="marketing">للتسويق</label>
                                         </div>
                                         <div class="custom-control custom-radio custom-control-inline">
-                                            <input type="radio" class="custom-control-input" id="guaranty" name="status" @if($orphan->guaranty) checked @endif value="guaranty"  >
+                                            <input type="radio" class="custom-control-input" id="guaranty" name="status" @if($orphan->status == 'guaranty') checked @endif  value="guaranty"  >
                                             <label class="custom-control-label" for="guaranty">مكفول</label>
                                         </div>
-                                        @error('status')
-                                        <div class="alert alert-danger">{{ $message }}</div>
-                                        @enderror
+                                        <span class="text-danger error-text col-md-6 status_error"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label for="marketingDate" class="col-md-2"><b>تاريخ التسويق</b><span style="color: red">*</span></label>
-                                    <input type="date" class="form-control col-md-6 mr-md-2 @error('marketingDate') is-invalid @enderror"  id="marketingDate" name="marketingDate" value="{{$orphan->marketingDate}}">
-                                    @error('marketingDate')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="date" class="form-control col-md-5 mr-md-3 "  id="marketingDate" name="marketingDate" value="{{$orphan->marketingDate}}">>
+                                    <span class="text-danger error-text col-md-6 marketingDate_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="guarantyDate" class="col-md-2"><b>تاريخ الكفالة</b><span style="color: red">*</span></label>
-                                    <input type="date" class="form-control col-md-6 mr-md-2 @error('guarantyDate') is-invalid @enderror"  id="guarantyDate" name="guarantyDate" value="{{$orphan->guarantyDate}}">
-                                    @error('guarantyDate')
-                                    <div class="alert alert-danger">{{ $message }}</div>
-                                    @enderror
+                                    <input type="date" class="form-control col-md-5 mr-md-3"  id="guarantyDate" name="guarantyDate" value="{{$orphan->guarantyDate}}">>
+                                    <span class="text-danger error-text col-md-6 guarantyDate_error"></span>
                                 </div>
                             </div>
                             <div class="col-md-3" >
@@ -222,17 +171,16 @@
                     </div>
                 </div>
             </form>
-
         </div>
         <div class="row" >
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header row " style="text-align: right;">
 
-                        <div class="col-md-2" >
-                            <button class="btn btn-primary  " data-toggle="modal" data-target="#addImage">اضافة صورة</button>
+                        <div class="col-md-1" >
+                            <button class="btn btn-primary  " data-toggle="modal" data-target="#addImage"><i class="fa fa-image nav-icon mr-2"></i><i class="fa fa-plus nav-icon"></i></button>
                         </div>
-                        <div class="col-md-10" >
+                        <div class="col-md-11" >
                             <span class="">الصور</span>
                         </div>
                     </div>
@@ -273,7 +221,32 @@
             }
         });
         $(function(){
-
+            $('#update-orphan-form').on('submit', function(e){
+                e.preventDefault();
+                var form = this;
+                $.ajax({
+                    url:$(form).attr('action'),
+                    method:$(form).attr('method'),
+                    data:new FormData(form),
+                    processData:false,
+                    dataType:'json',
+                    contentType:false,
+                    beforeSend:function(){
+                        $(form).find('span.error-text').text('');
+                    },
+                    success:function(data){
+                        if(data.code == 0){
+                            $.each(data.error, function(prefix, val){
+                                $(form).find('span.'+prefix+'_error').text(val[0]);
+                            });
+                            toastr.error(data.msg);
+                        }
+                        else{
+                            toastr.success(data.msg);
+                        }
+                    }
+                });
+            });
             //ADD NEW IMAGE
             $('#add-image-form').on('submit', function(e){
                 e.preventDefault();
@@ -292,10 +265,8 @@
                         if(data.code == 0){
                             $.each(data.error, function(prefix, val){
                                 $(form).find('span.'+prefix+'_error').text(val[0]);
-
-
                             });
-
+                            toastr.error(data.msg);
                         }
                         else{
                             $('.addImage').modal('hide');
@@ -339,6 +310,7 @@
                         $('.editImage').find('input[name="id"]').val(data.id);
                         $('.editImage select').val(data.type_image);
                         $('.editImage').modal('show');
+                        toastr.success(data.msg);
                     }else{
                         toastr.error(data.msg);
                     }
@@ -367,6 +339,7 @@
                             $.each(data.error, function(prefix, val){
                                 $(form).find('span.'+prefix+'_error').text(val[0]);
                             });
+                            toastr.error(data.msg);
                         }else{
                             $('#images-table').DataTable().ajax.reload(null, false);
                             $('.editImage').modal('hide');
@@ -374,9 +347,7 @@
                             toastr.success(data.msg);
                         }
                     },
-                    error: function () {
-                        toastr.success('error code');
-                    }
+
                 });
             });
             //DELETE USER RECORD
@@ -466,6 +437,8 @@
                                 if(data.code == 1){
                                     $('#images-table').DataTable().ajax.reload(null, true);
                                     toastr.success(data.msg);
+                                }else{
+                                    toastr.error(data.msg);
                                 }
                             },'json');
                         }

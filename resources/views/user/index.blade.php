@@ -63,10 +63,8 @@
                         if(data.code == 0){
                             $.each(data.error, function(prefix, val){
                                 $(form).find('span.'+prefix+'_error').text(val[0]);
-
-
                             });
-
+                            toastr.error(data.msg);
                         }
                         else{
                             $('.addUser').modal('hide');
@@ -134,6 +132,7 @@
                             $.each(data.error, function(prefix, val){
                                 $(form).find('span.'+prefix+'_error').text(val[0]);
                             });
+                            toastr.error(data.msg);
                         }else{
                             $('#users-table').DataTable().ajax.reload(null, false);
                             $('.editUser').modal('hide');

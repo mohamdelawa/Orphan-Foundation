@@ -103,35 +103,74 @@ class OrphanController extends Controller
     {
         $orphan = Orphan::all()->find($request->id);
         $types_image = TypeImage::all();
-        $personalPicture = $orphan->imagesGallery->where('type_image_id','=',TypeImage::all()->where('type','=','صورة شخصية')->first()->id)->first()->path;
+        $personalPicture = $orphan->imagesGallery->where('type_image_id','=',TypeImage::all()->where('type','=','صورة شخصية')->first()->id)->first();
+        if($personalPicture){
+            $personalPicture = $personalPicture->path;
+        }else{
+            $personalPicture = '';
+        }
         return view('orphan.show_orphan', compact(['orphan','types_image','personalPicture']));
     }
     public function store(Request $request)
     {
         $rules = [
-            'orphanNumber' => 'required',
-            'orphanName' => 'required:string',
-            'mothersName' => 'required:string',
-            'mothersIdentity' => 'required:number',
-            'breadwinnerName' => 'required:string',
-            'relativeRelation' => 'required:string',
-            'breadwinnerIdentity' => 'required:number',
-            'phoneNumber' => 'required:number',
-            'accountNumber' => 'required:number',
-            'address' => 'required:string',
-            'educationalLevel' => 'required:string',
-            'guarantyType' => 'required:string',
-            'dob' => 'required:date',
-            'healthStatus' => 'required:string',
-            'disease' => 'required:string',
-            'orphanIdentity' => 'required|unique:orphans',
-            'educationalAttainmentLevel' => 'required:string',
-            'gender' => 'required:string',
-            'fathersDeathDate' => 'required:date',
-            'causeOfDeath' => 'required:string',
-            'status' => 'required:string'
+            'orphanNumber' => 'unique:orphans',
+            'orphanName' => 'required',
+            'mothersName' => 'required',
+            'mothersIdentity' => 'required|digits:9',
+            'breadwinnerName' => 'required',
+            'relativeRelation' => 'required',
+            'breadwinnerIdentity' => 'required|digits:9',
+            'phoneNumber' => 'required|digits:10',
+            'accountNumber' => 'required|digits:7',
+            'address' => 'required',
+            'educationalLevel' => 'required',
+            'guarantyType' => 'required',
+            'dob' => 'required|date',
+            'healthStatus' => 'required',
+            'disease' => 'required',
+            'orphanIdentity' => 'required|digits:9|unique:orphans',
+            'educationalAttainmentLevel' => 'required',
+            'gender' => 'required',
+            'fathersDeathDate' => 'required|date',
+            'causeOfDeath' => 'required',
+            'status' => 'required',
+            'marketingDate' => 'date',
+            'guarantyDate' => 'date',
         ];
-        $masseges = [''=>'',];
+        $masseges = [
+            'orphanNumber.unique' => 'رقم اليتيم موجود مسبقا.',
+            'orphanName.required' => 'اسم اليتيم مطلوب.',
+            'mothersName.required' => 'اسم الأم مطلوب.',
+            'mothersIdentity.required' => 'رقم هوية  الأم مطلوبة.',
+            'mothersIdentity.digits' => 'رقم هوية الأم غير صحيح يجب أن يتكون من 9 أرقام.',
+            'breadwinnerName.required' => 'اسم المعيل مطلوب.',
+            'relativeRelation.required' => 'صلة القرابة مطلوبة.',
+            'breadwinnerIdentity.required' =>'رقم هوية  المعيل مطلوبة.',
+            'breadwinnerIdentity.digits' => 'رقم هوية المعيل غير صحيح يجب أن يتكون من 9 أرقام.',
+            'phoneNumber.required' =>'رقم الجوال مطلوب.',
+            'phoneNumber.digits' => 'رقم الجوال غير صحيح يجب أن يتكون من 10 أرقام(0594875451).',
+            'accountNumber.required' => 'رقم الحساب مطلوب.',
+            'accountNumber.digits' =>'رقم الحساب غير صحيح يجب أن يتكون من 7 أرقام(1234567).',
+            'address.required' => 'العنوان مطلوب.',
+            'educationalLevel.required' => 'المرحلة الدراسية مطلوبة.',
+            'guarantyType.required' => 'نوع الكفالة مطلوبة.',
+            'dob.required' => 'تاريخ ميلاد اليتيم مطلوب.',
+            'dob.date' => 'تاريخ ميلاد غير صحيح.',
+            'healthStatus.required' => 'الحالة الصحية لليتيم مطلوبة.',
+            'disease.required' => 'نوع المرض أو الاعاقة لليتيم مطلوبة.',
+            'orphanIdentity.required' => 'رقم هوية  اليتيم مطلوبة.',
+            'orphanIdentity.digits' => 'رقم هوية اليتيم غير صحيح يجب أن يتكون من 9 أرقم.',
+            'orphanIdentity.unique' => 'رقم هوية اليتيم موجود مسبقا.',
+            'educationalAttainmentLevel.required' => 'مستوى التحصيل العلمي لليتيم مطلوب.',
+            'gender.required' => 'جنس اليتيم مطلوب.',
+            'fathersDeathDate.required' => 'تاريخ وفاة الأب  مطلوب.',
+            'fathersDeathDate.date' => 'تاريخ وفاة الأب  غير صحيح.',
+            'causeOfDeath.required' => 'سبب وفاة الأب  مطلوبة.',
+            'status.required' => 'الحالة مطلوبة.',
+            'marketingDate.date'=>'تاريخ التسويق غير صحيح.',
+            'guarantyDate.date'=>'تاريخ الكفالة غير صحيح.',
+            ];
         $validator = Validator::make($request->all(), $rules, $masseges);
         if ($validator->fails()) {
             return response()->json(['code'=>0,'error'=>$validator->errors()->toArray(),'msg'=>'فشلت عملية إضافة يتيم جديد']);
@@ -182,71 +221,109 @@ class OrphanController extends Controller
     public function update(Request $request)
     {
         $rules = [
-            'orphanNumber' => 'required',
-            'orphanName' => 'required:string',
-            'mothersName' => 'required:string',
-            'mothersIdentity' => 'required:number',
-            'breadwinnerName' => 'required:string',
-            'relativeRelation' => 'required:string',
-            'breadwinnerIdentity' => 'required:number',
-            'phoneNumber' => 'required:number',
-            'accountNumber' => 'required:number',
-            'address' => 'required:string',
-            'educationalLevel' => 'required:string',
-            'guarantyType' => 'required:string',
-            'dob' => 'required:date',
-            'healthStatus' => 'required:string',
-            'disease' => 'required:string',
-            'orphanIdentity' => 'required|unique:orphans,orphanIdentity,'.$request->id,
-            'educationalAttainmentLevel' => 'required:string',
-            'gender' => 'required:string',
-            'fathersDeathDate' => 'required:date',
-            'causeOfDeath' => 'required:string',
-            'status' => 'required:string'
+            'orphanNumber' => 'unique:orphans,orphanNumber,'.$request->id,
+            'orphanName' => 'required',
+            'mothersName' => 'required',
+            'mothersIdentity' => 'required|digits:9',
+            'breadwinnerName' => 'required',
+            'relativeRelation' => 'required',
+            'breadwinnerIdentity' => 'required|digits:9',
+            'phoneNumber' => 'required|digits:10',
+            'accountNumber' => 'required|digits:7',
+            'address' => 'required',
+            'educationalLevel' => 'required',
+            'guarantyType' => 'required',
+            'dob' => 'required|date',
+            'healthStatus' => 'required',
+            'disease' => 'required',
+            'orphanIdentity' => 'required|digits:9|unique:orphans,orphanIdentity,'.$request->id,
+            'educationalAttainmentLevel' => 'required',
+            'gender' => 'required',
+            'fathersDeathDate' => 'required|date',
+            'causeOfDeath' => 'required',
+            'status' => 'required',
+            'marketingDate' => 'date',
+            'guarantyDate' => 'date',
         ];
-        $masseges = [];
+        $masseges = [
+            'orphanNumber.unique' => 'رقم اليتيم موجود مسبقا.',
+            'orphanName.required' => 'اسم اليتيم مطلوب.',
+            'mothersName.required' => 'اسم الأم مطلوب.',
+            'mothersIdentity.required' => 'رقم هوية  الأم مطلوبة.',
+            'mothersIdentity.digits' => 'رقم هوية الأم غير صحيح يجب أن يتكون من 9 أرقام.',
+            'breadwinnerName.required' => 'اسم المعيل مطلوب.',
+            'relativeRelation.required' => 'صلة القرابة مطلوبة.',
+            'breadwinnerIdentity.required' =>'رقم هوية  المعيل مطلوبة.',
+            'breadwinnerIdentity.digits' => 'رقم هوية المعيل غير صحيح يجب أن يتكون من 9 أرقام.',
+            'phoneNumber.required' =>'رقم الجوال مطلوب.',
+            'phoneNumber.digits' => 'رقم الجوال غير صحيح يجب أن يتكون من 10 أرقام(0594875451).',
+            'accountNumber.required' => 'رقم الحساب مطلوب.',
+            'accountNumber.digits' =>'رقم الحساب غير صحيح يجب أن يتكون من 7 أرقام(1234567).',
+            'address.required' => 'العنوان مطلوب.',
+            'educationalLevel.required' => 'المرحلة الدراسية مطلوبة.',
+            'guarantyType.required' => 'نوع الكفالة مطلوبة.',
+            'dob.required' => 'تاريخ ميلاد اليتيم مطلوب.',
+            'dob.date' => 'تاريخ ميلاد غير صحيح.',
+            'healthStatus.required' => 'الحالة الصحية لليتيم مطلوبة.',
+            'disease.required' => 'نوع المرض أو الاعاقة لليتيم مطلوبة.',
+            'orphanIdentity.required' => 'رقم هوية  اليتيم مطلوبة.',
+            'orphanIdentity.digits' => 'رقم هوية اليتيم غير صحيح يجب أن يتكون من 9 أرقم.',
+            'orphanIdentity.unique' => 'رقم هوية اليتيم موجود مسبقا.',
+            'educationalAttainmentLevel.required' => 'مستوى التحصيل العلمي لليتيم مطلوب.',
+            'gender.required' => 'جنس اليتيم مطلوب.',
+            'fathersDeathDate.required' => 'تاريخ وفاة الأب  مطلوب.',
+            'fathersDeathDate.date' => 'تاريخ وفاة الأب  غير صحيح.',
+            'causeOfDeath.required' => 'سبب وفاة الأب  مطلوبة.',
+            'status.required' => 'الحالة مطلوبة.',
+            'marketingDate.date'=>'تاريخ التسويق غير صحيح.',
+            'guarantyDate.date'=>'تاريخ الكفالة غير صحيح.',
+        ];
         $validator = Validator::make($request->all(), $rules, $masseges);
         if ($validator->fails()) {
-            return redirect()->back()->withInput()->withErrors($validator->errors());
+            return response()->json(['code'=>0,'error'=>$validator->errors()->toArray(),'msg'=>'فشلت عملية تعديل بيانات اليتيم ']);
         }
-        $orphan = Orphan::all()->find($request->id);
-        $orphan->orphanNumber = $request->orphanNumber;
-        $orphan->orphanName = $request->orphanName;
-        $orphan->mothersName = $request->mothersName;
-        $orphan->mothersIdentity = $request->mothersIdentity;
-        $orphan->breadwinnerName = $request->breadwinnerName;
-        $orphan->relativeRelation = $request->relativeRelation;
-        $orphan->breadwinnerIdentity = $request->breadwinnerIdentity;
-        $orphan->phoneNumber = $request->phoneNumber;
-        $orphan->accountNumber = $request->accountNumber;
-        $orphan->address = $request->address;
-        $orphan->educationalLevel = $request->educationalLevel;
-        $orphan->guarantyType = $request->guarantyType;
-        $orphan->dob = $request->dob;
-        $orphan->healthStatus = $request->healthStatus;
-        $orphan->disease = $request->disease;
-        $orphan->orphanIdentity = $request->orphanIdentity;
-        $orphan->educationalAttainmentLevel = $request->educationalAttainmentLevel;
-        if ($request->gender == "male") {
-            $orphan->gender = 0;
-        } else {
-            $orphan->gender = 1;
-        }
-        $orphan->fathersDeathDate = $request->fathersDeathDate;
-        $orphan->causeOfDeath = $request->causeOfDeath;
-        $orphan->marketingDate = $request->marketingDate;
-        $orphan->guarantyDate = $request->guarantyDate;
-        if($request->status == "marketing"){
-            $orphan->status = 0;
-        }else{
-            $orphan->status = 1;
-        }
+        else {
+            $orphan = Orphan::all()->find($request->id);
+            $orphan->orphanNumber = $request->orphanNumber;
+            $orphan->orphanName = $request->orphanName;
+            $orphan->mothersName = $request->mothersName;
+            $orphan->mothersIdentity = $request->mothersIdentity;
+            $orphan->breadwinnerName = $request->breadwinnerName;
+            $orphan->relativeRelation = $request->relativeRelation;
+            $orphan->breadwinnerIdentity = $request->breadwinnerIdentity;
+            $orphan->phoneNumber = $request->phoneNumber;
+            $orphan->accountNumber = $request->accountNumber;
+            $orphan->address = $request->address;
+            $orphan->educationalLevel = $request->educationalLevel;
+            $orphan->guarantyType = $request->guarantyType;
+            $orphan->dob = $request->dob;
+            $orphan->healthStatus = $request->healthStatus;
+            $orphan->disease = $request->disease;
+            $orphan->orphanIdentity = $request->orphanIdentity;
+            $orphan->educationalAttainmentLevel = $request->educationalAttainmentLevel;
+            if ($request->gender == "male") {
+                $orphan->gender = 0;
+            } else {
+                $orphan->gender = 1;
+            }
+            $orphan->fathersDeathDate = $request->fathersDeathDate;
+            $orphan->causeOfDeath = $request->causeOfDeath;
+            $orphan->marketingDate = $request->marketingDate;
+            $orphan->guarantyDate = $request->guarantyDate;
+            if ($request->status == "marketing") {
+                $orphan->status = 0;
+            } else {
+                $orphan->status = 1;
+            }
 
-        $orphan->user_id = auth()->user()->id;
-        if ($orphan->save()) {
-            return redirect()->back()->with(['success' => 'تمت عملية تعديل بيانات اليتيم بنجاح !']);
-        } else {
-            return redirect()->back()->with(['error' => 'فشلت عملية تعديل بيانات اليتيم !']);
+            $orphan->user_id = auth()->user()->id;
+            $query = $orphan->save();
+
+            if(!$query){
+                return response()->json(['code'=>0,'msg'=>'فشلت عملية إضافة يتيم جديد']);
+            }else{
+                return response()->json(['code'=>1,'msg'=>'تم إضافة يتيم حديد بنجاح']);
+            }
         }
     }
     // DELETE Orphan RECORD

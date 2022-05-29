@@ -14,20 +14,24 @@ class RoleController extends Controller
     }
 
     //ADD NEW Role
-    public function addRole(Request $request){
+    public function store(Request $request){
          $validator = \Validator::make($request->all(),[
              'name'=>'required|unique:roles',
+         ],
+         [
+           'name.required'=> 'اسم المنصب مطلوب.',
+           'name.unique'=>'اسم المنصب موجود مسبقا.'
          ]);
 
          if(!$validator->passes()){
-              return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
+              return response()->json(['code'=>0,'error'=>$validator->errors()->toArray(), 'msg'=>'فشلت عملية اضافة منصب جديد.']);
          }else{
              $role = new Role();
              $role->name = $request->name;
              $query = $role->save();
 
              if(!$query){
-                 return response()->json(['code'=>0,'msg'=>'هناك خطأ ما']);
+                 return response()->json(['code'=>0, 'msg'=>'فشلت عملية اضافة منصب جديد.']);
              }else{
                  return response()->json(['code'=>1,'msg'=>'تم إضافة رتبة بنجاح']);
              }
@@ -41,8 +45,8 @@ class RoleController extends Controller
                               ->addIndexColumn()
                               ->addColumn('actions', function($row){
                                   return '<div class="btn-group">
-                                                <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editRoleBtn">Update</button>
-                                                <button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteRoleBtn">Delete</button>
+                                                <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editRoleBtn" style="margin: 5px">تعديل</button>
+                                                <button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteRoleBtn" style="margin: 5px">حذف</button>
                                           </div>';
                               })
                               ->addColumn('checkbox', function($row){
@@ -61,15 +65,19 @@ class RoleController extends Controller
     }
 
     //UPDATE Role DETAILS
-    public function updateRoleDetails(Request $request){
+    public function update(Request $request){
         $role_id = $request->id;
 
         $validator = \Validator::make($request->all(),[
             'name'=>'required|unique:roles,name,'.$role_id,
+        ],
+         [
+            'name.required'=> 'اسم المنصب مطلوب.',
+            'name.unique'=>'اسم المنصب موجود مسبقا.'
         ]);
 
         if(!$validator->passes()){
-               return response()->json(['code'=>0,'error'=>$validator->errors()->toArray()]);
+               return response()->json(['code'=>0,'error'=>$validator->errors()->toArray() , 'msg'=>'فشلت عملية تحديث منصب .']);
         }else{
 
             $role = Role::find($role_id);
@@ -77,9 +85,9 @@ class RoleController extends Controller
             $query = $role->save();
 
             if($query){
-                return response()->json(['code'=>1, 'msg'=>'تم تحديث بيانات الرتبة']);
+                return response()->json(['code'=>1, 'msg'=>'تم تحديث بيانات المنصب بنجاح']);
             }else{
-                return response()->json(['code'=>0, 'msg'=>'هناك خطأ ما']);
+                return response()->json(['code'=>0,  'msg'=>'فشلت عملية تحديث منصب .']);
             }
         }
     }

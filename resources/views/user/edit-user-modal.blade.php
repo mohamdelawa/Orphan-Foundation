@@ -47,7 +47,7 @@
                          <span class="text-danger error-text confirm_password_error"></span>
                      </div>
                      <div class="form-group">
-                         <button type="submit" class="btn btn-block btn-success">حفظ التعديلات</button>
+                         <button type="submit" class="btn btn-block btn-primary">حفظ التعديلات</button>
                      </div>
                  </form>
 
