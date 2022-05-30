@@ -55,7 +55,7 @@
                     <a href="{{route('users.list')}}" class="nav-link">
                         <i class="nav-icon fas fa-user-friends"></i>
                         <p>
-                            Users
+                            المستخدمين
                         </p>
                     </a>
                 </li>
@@ -63,15 +63,14 @@
                     <a href="{{route('roles.list')}}" class="nav-link">
                         <i class="nav-icon fas fa-address-card"></i>
                         <p>
-                            Roles
+                            المناصب
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>
-                        <p>
-                            Orphans
+                        <p>الأيتام
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -79,19 +78,42 @@
                         <li class="nav-item">
                             <a href="{{route('orphans.list')}}" class="nav-link">
                                 <i class="fas fa-th nav-icon"></i>
-                                <p>Orphans</p>
+                                <p>الأيتام</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{route('form.add.orphan')}}" class="nav-link">
                                 <i class="nav-icon fas fa-plus"></i>
-                                <p>Add Orphan</p>
+                                <p>اضافة يتيم</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{route('form.import.excel.orphans')}}" class="nav-link">
                                 <i class="fas fa-file-excel nav-icon"></i>
-                                <p>Add Excel Orphans</p>
+                                <p>اضافة أيتام اكسل</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-coins"></i>
+                        <p>
+                            الصرفيات
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('payments.list')}}" class="nav-link">
+                                <i class="fas fa-th nav-icon"></i>
+                                <p>الصرفيات</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('paymentOrphans.list')}}" class="nav-link">
+                                <i class="fas fa-th nav-icon"></i>
+                                <p>صرفيات الأيتام</p>
                             </a>
                         </li>
                     </ul>

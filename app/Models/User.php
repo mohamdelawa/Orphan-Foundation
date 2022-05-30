@@ -57,4 +57,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(TypeImage::class);
     }
+    public function paymentsOrphans()
+    {
+        return $this->hasMany(PaymentOrphan::class);
+    }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

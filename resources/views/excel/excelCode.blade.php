@@ -21,7 +21,7 @@
     <br><br>
     <button type="submit">Upload File</button>
     <br><br><br>
-    <a href="{{ url('/sample/test.xlsx') }}">Download Sample</a>
+    <a href="{{ url('/sample/orphans.xlsx') }}">Download Sample</a>
     <a href="{{route('pdf')}}">Download PDF </a>
 </form>
 <br /> <br />

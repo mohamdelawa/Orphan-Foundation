@@ -1,7 +1,4 @@
 @extends('layout.app')
-@section('title')
-   Orphans
-@endsection
 @section('padding page')
         <div class="container" style="margin-top: 50px;" >
             <div class="row" >

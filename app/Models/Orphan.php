@@ -12,6 +12,10 @@ class Orphan extends Model
     {
         return $this->hasMany(ImageGallery::class);
     }
+    public function payments()
+    {
+        return $this->hasMany(PaymentOrphan::class);
+    }
     public function user()
     {
         return $this->belongsTo(User::class, 'id');

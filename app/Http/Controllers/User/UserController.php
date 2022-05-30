@@ -145,9 +145,9 @@ class UserController extends Controller
         $query = User::find($user_id)->delete();
 
         if($query){
-            return response()->json(['code'=>1, 'msg'=>'تم حذف المستخدم بنجاح']);
+            return response()->json(['code'=>1, 'msg'=>'تم حذف المستخدم بنجاح.']);
         }else{
-            return response()->json(['code'=>0, 'msg'=>'هناك خطأ ما']);
+            return response()->json(['code'=>0, 'msg'=>'فشلت عملية حذف مستخدم.']);
         }
     }
     public function deleteSelectedUsers(Request $request){

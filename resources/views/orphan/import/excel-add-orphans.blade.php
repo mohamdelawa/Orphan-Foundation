@@ -6,12 +6,12 @@
                 <div class="card">
                     <div class="card-header  " style="text-align: right;">
                         <div style="display: flex; justify-content: end" >
-                            <span class="">Imports</span>
+                            <span class="">اضافة أيتام اكسل</span>
                         </div>
                     </div>
                     <div class="card-body " style="text-align: right;direction: rtl">
                         <form id="add-excel-orphans-form"  action="{{route('add.excel.orphans')}}" method="post" enctype="multipart/form-data">
-                            {{ csrf_field() }}
+                            @csrf
                             <div class="row">
                                 <div class="form-group col-lg-1 col-md-2">
                                     <label for="file" ><b> أضف الملف</b></label>
@@ -19,7 +19,7 @@
                                 <div class="form-group col-lg-4 col-md-5">
                                     <div class="custom-file form-control " id="file">
                                         <input class="custom-file-input " id="customFile" type="file" name="file">
-                                        <label class="custom-file-label " for="customFile" style="text-align: left">Choose file</label>
+                                        <label class="custom-file-label " for="customFile" style="text-align: left">اختر ملف</label>
                                         <span class="text-danger error-text file_error"></span>
                                     </div>
                                     <script>
@@ -37,7 +37,7 @@
                             </div>
 
                         </form>
-                        <a href="{{ url('/sample/test.xlsx') }}"><i class="nav-icon fas fa-download"></i> تنزيل مثال</a>
+                        <a href="{{ asset('/sample/orphans.xlsx') }}"><i class="nav-icon fas fa-download"></i> تنزيل مثال</a>
                           <hr/>
                         <div>
                             <ul id="errors_excel">

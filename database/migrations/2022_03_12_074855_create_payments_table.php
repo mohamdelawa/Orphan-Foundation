@@ -15,9 +15,11 @@ class CreatePaymentsTable extends Migration
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('month');
-            $table->string('year');
+            $table->string('name')->unique();
+            $table->String('currency');
+            $table->String('paymentDate');
+            $table->double('exchangeRate');
+            $table->double('commission')->default(0.0);
             $table->timestamps();
             $table->softDeletes();
         });

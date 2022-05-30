@@ -15,9 +15,9 @@ class CreatePaymentOrphansTable extends Migration
     {
         Schema::create('payment_orphans', function (Blueprint $table) {
             $table->id();
-            $table->double('amount');
-            $table->softDeletes();
+            $table->double('warrantyValue');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
