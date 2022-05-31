@@ -71,10 +71,10 @@ Route::middleware('auth')->group(function () {
         Route::prefix('paymentsOrphans')->group(function (){
             Route::get('/', 'Payment\PaymentOrphanController@index')->name('paymentOrphans.list');
             Route::get('/searchOrphans', 'Payment\PaymentOrphanController@searchPaymentOrphans')->name('searchPaymentOrphans');
-            Route::get('/getOrphansList','Payment\PaymentOrphanController@getPaymentOrphansList')->name('get.payment.orphans.list');
+            Route::get('/getPaymentOrphansList','Payment\PaymentOrphanController@getPaymentOrphansList')->name('get.payment.orphans.list');
+            Route::post('/getPaymentOrphanDetails','Payment\PaymentOrphanController@getPaymentOrphanDetails')->name('get.payment.orphan.details');
             Route::post('/storePaymentOrphan', 'Payment\PaymentOrphanController@store')->name('add.payment.orphan');
-            Route::get('/showPaymentOrphan/{id}', 'Payment\PaymentOrphanController@show')->name('show.payment.orphan');
-            Route::post('/updatePaymentOrphan/{id}', 'Payment\PaymentOrphanController@update')->name('update.payment.orphan');
+            Route::post('/updatePaymentOrphan', 'Payment\PaymentOrphanController@update')->name('update.payment.orphan.details');
             Route::post('/deletePaymentOrphan','Payment\PaymentOrphanController@deletePaymentOrphan')->name('delete.payment.orphan');
             Route::post('/deleteSelectedPaymentOrphans','Payment\PaymentOrphanController@deleteSelectedPaymentOrphans')->name('delete.selected.payment.orphans');
         });

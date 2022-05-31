@@ -61,7 +61,7 @@
         });
         $(function(){
 
-            //GET ALL USERS
+            //GET ALL orphans
             var table =  $('#orphans-table').DataTable({
                 processing:true,
                 info:true,
