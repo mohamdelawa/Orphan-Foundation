@@ -73,10 +73,12 @@ Route::middleware('auth')->group(function () {
             Route::get('/searchOrphans', 'Payment\PaymentOrphanController@searchPaymentOrphans')->name('searchPaymentOrphans');
             Route::get('/getPaymentOrphansList','Payment\PaymentOrphanController@getPaymentOrphansList')->name('get.payment.orphans.list');
             Route::post('/getPaymentOrphanDetails','Payment\PaymentOrphanController@getPaymentOrphanDetails')->name('get.payment.orphan.details');
+            Route::get('/searchPaymentsOrphans', 'Payment\PaymentOrphanController@searchPaymentsOrphans')->name('searchPaymentsOrphans');
             Route::post('/storePaymentOrphan', 'Payment\PaymentOrphanController@store')->name('add.payment.orphan');
             Route::post('/updatePaymentOrphan', 'Payment\PaymentOrphanController@update')->name('update.payment.orphan.details');
             Route::post('/deletePaymentOrphan','Payment\PaymentOrphanController@deletePaymentOrphan')->name('delete.payment.orphan');
-            Route::post('/deleteSelectedPaymentOrphans','Payment\PaymentOrphanController@deleteSelectedPaymentOrphans')->name('delete.selected.payment.orphans');
+            Route::post('/deleteSelectedPaymentOrphans','Payment\PaymentOrphanController@deleteSelectedPaymentOrphans')->name('delete.selected.payments_orphans');
+            Route::post('/addExcelPaymentsOrphans','Payment\ImportExcelPaymentsOrphansController@store')->name('add.excel.payments.orphans');
         });
     });
 });

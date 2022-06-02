@@ -6,7 +6,7 @@
                 <div class="card">
                     <div class="card-header  " style="text-align: right;">
                         <div style="display: flex; justify-content: end" >
-                            <span class="">اضافة أيتام اكسل</span>
+                            <span class="">اشتيراد أيتام اكسل</span>
                         </div>
                     </div>
                     <div class="card-body " style="text-align: right;direction: rtl">
@@ -32,7 +32,7 @@
 
                                 </div>
                                 <div class="form-group col-lg-1 col-md-2  mr-md-2">
-                                    <button type="submit"  class="btn btn-block btn-success">حفظ</button>
+                                    <button type="submit"  class="btn btn-block btn-primary">حفظ</button>
                                 </div>
                             </div>
 
@@ -61,7 +61,7 @@
         });
         $(function(){
 
-            //ADD NEW User
+            //ADD orphans excel
             $('#add-excel-orphans-form').on('submit', function(e){
                 e.preventDefault();
                 var form = this;
