@@ -2,9 +2,16 @@
 @section('padding page')
         <div class="container">
             <div class="row" style="margin-top: 45px">
-                <div class="col-md-8">
+                <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header" style="text-align: right;">المناصب</div>
+                        <div class="card-header" style="text-align: right;">
+                            <div class="col-md-1" >
+                                <button class="btn btn-primary  " data-toggle="modal" data-target="#addRole"><i class="nav-icon fas fa-plus"></i></button>
+                            </div>
+                            <div class="col-md-11" >
+                                <span>المناصب</span>
+                            </div>
+                        </div>
                         <div class="card-body table-responsive" style="text-align: right">
                             <table class="table table-hover table-condensed" id="roles-table" style="direction: rtl; text-align: center">
                                 <thead>
@@ -18,28 +25,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card" style="text-align: right;">
-                        <div class="card-header">اضافة منصب جديد</div>
-                        <div class="card-body">
-                            <form action="{{ route('add.role') }}" method="post" id="add-role-form" autocomplete="off">
-                                @csrf
-                                <div class="form-group">
-                                    <label for="">اسم المنصب</label>
-                                    <input type="text" class="form-control" style="direction: rtl" name="name" placeholder="اسم المنصب">
-                                    <span class="text-danger error-text name_error"></span>
-                                </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-block btn-primary">حفظ</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
-    @include('role/edit-role-modal')
+    @include('role.edit-role-modal')
+    @include('role.add-role-modal')
 
 @endsection
 @section('script')
@@ -73,8 +63,10 @@
                                 $(form).find('span.'+prefix+'_error').text(val[0]);
                             });
                             toastr.error(data.msg);
-                        }else{
-                            $(form)[0].reset();
+                        }
+                        else{
+                            $('.addRole').modal('hide');
+                            $('.addRole').find('form')[0].reset();
                             //  alert(data.msg);
                             $('#roles-table').DataTable().ajax.reload(null, false);
                             toastr.success(data.msg);
@@ -101,8 +93,6 @@
                 $('input[name="main_checkbox"]').prop('checked', false);
                 $('button#deleteAllBtn').addClass('d-none');
             });
-
-
             $(document).on('click','#editRoleBtn', function(){
                 var role_id = $(this).data('id');
                 $('.editRole').find('form')[0].reset();

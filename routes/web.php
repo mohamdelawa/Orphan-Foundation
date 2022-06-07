@@ -4,13 +4,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/import', 'TestExcelController@importFile')->name('import');
 Route::post('/import', 'TestExcelController@importExcel');
-
 Route::get('/reportOrphan/{id}', 'TestExcelController@reportOrphan')->name('reportOrphan');
 Route::get('/report', 'TestExcelController@pdf')->name('pdf');
 
-Route::get('/index', function () {
-    return view('orphan.index');
-})->name('dashboard');
 Route::middleware('auth')->group(function () {
     Route::prefix('orphans')->group(function () {
         Route::get('/', 'Orphan\OrphanController@index')->name('orphans.list');
@@ -31,8 +27,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/updateImageDetails','Orphan\ImageGalleryController@update')->name('update.image.details');
         Route::post('/deleteImage','Orphan\ImageGalleryController@deleteImage')->name('delete.image');
         Route::post('/deleteSelectedImages','Orphan\ImageGalleryController@deleteSelectedImages')->name('delete.selected.images');
-        Route::prefix('importExcelOrphans')->group(function (){
-            Route::get('/', 'Orphan\ImportExcelOrphansController@index')->name('form.import.excel.orphans');
+        Route::prefix('importOfOrphans')->group(function (){
             Route::post('/addExcelOrphans','Orphan\ImportExcelOrphansController@store')->name('add.excel.orphans');
             Route::post('/uploadImagesReports', 'TestExcelController@uploadFolder')->name('import.images.reports.orphan');
 
@@ -81,7 +76,28 @@ Route::middleware('auth')->group(function () {
             Route::post('/addExcelPaymentsOrphans','Payment\ImportExcelPaymentsOrphansController@store')->name('add.excel.payments.orphans');
         });
     });
+    Route::prefix('typeImages')->group(function (){
+        Route::get('/','User\TypeImageController@index')->name('type.images.list');
+        Route::post('/add-type-images','User\TypeImageController@store')->name('add.type.image');
+        Route::get('/getTypeImagesList','User\TypeImageController@getTypeImagesList')->name('get.type.images.list');
+        Route::post('/getTypeImageDetails','User\TypeImageController@getTypeImageDetails')->name('get.type.image.details');
+        Route::post('/updateTypeImageDetails','User\TypeImageController@update')->name('update.type.image.details');
+        Route::post('/deleteTypeImage','User\TypeImageController@deleteTypeImage')->name('delete.type.image');
+        Route::post('/deleteSelectedTypeImageS','User\TypeImageController@deleteSelectedTypeImages')->name('delete.selected.type.images');
+
+    });
+    Route::prefix('permissions')->group(function (){
+        Route::get('/','Permission\PermissionController@index')->name('permissions.list');
+        Route::post('/add-permission','Permission\PermissionController@store')->name('add.permission');
+        Route::get('/getPermissionsList','Permission\PermissionController@getPermissionsList')->name('get.permissions.list');
+        Route::post('/getPermissionDetails','Permission\PermissionController@getPermissionDetails')->name('get.permission.details');
+        Route::post('/updatePermissionDetails','Permission\PermissionController@update')->name('update.permission.details');
+        Route::post('/deletePermission','Permission\PermissionController@deletePermission')->name('delete.permission');
+        Route::post('/deleteSelectedPermissions','Permission\PermissionController@deleteSelectedPermissions')->name('delete.selected.permissions');
+
+    });
 });
+
 Route::get('/','Auth\LoginController@login')->name('index');
 Route::get('/login','Auth\LoginController@login')->name('login');
 Route::post('/authenticate','Auth\LoginController@authenticate')->name('authenticate');

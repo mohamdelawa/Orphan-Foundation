@@ -17,9 +17,11 @@ class CreateOrphansTable extends Migration
             $table->id();
             $table->string('orphanNumber')->nullable();
             $table->string('orphanName');
+            $table->string('orphanNameEn');
             $table->string('mothersName');
             $table->string('mothersIdentity');
             $table->string('breadwinnerName');
+            $table->string('breadwinnerNameEn');
             $table->string('relativeRelation');
             $table->string('breadwinnerIdentity');
             $table->string('phoneNumber');

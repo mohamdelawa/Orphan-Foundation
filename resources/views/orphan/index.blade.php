@@ -22,16 +22,27 @@
                                     </select>
                                     <input type="search" class="form-control  col-md-4 col-sm-12"   id="valueSearch" style="margin: 5px" >
 
-                                    <button type="button" class="btn btn-warning col-sm-2 col-md-2"  id="btn-searchOrphans" style="margin: 5px">بحث</button>
+                                    <button type="button" class="btn btn-warning col-sm-2 col-md-2"  id="btn-searchOrphans" style="margin: 5px; color:white">بحث</button>
                                 </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header" style="text-align: right;">
+                        <div class="card-header row" style="text-align: right;">
+                            <div class="col-md-1" >
+                                <div class="dropdown show">
+                                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="nav-icon fas fa-plus"></i>
+                                    </a>
 
-                                <span class="">الأيتام</span>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="text-align: right">
+                                        <a class="dropdown-item" href="{{route('form.add.orphan')}}">إضافة يتيم<i class="nav-icon fas fa-plus" style="margin: 5px"></i></a>
+                                        <a class="dropdown-item" data-toggle="modal" data-target="#addExcelOrphans">استيراد من اكسل<i class="nav-icon fas fa-file-excel" style="margin: 5px"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                                <span class="col-md-11">الأيتام</span>
                         </div>
                         <div class="card-body table-responsive" style="text-align: right">
 
@@ -50,6 +61,8 @@
                 </div>
             </div>
         </div>
+
+        @include('orphan.add-excel-orphans-modal')
 @endsection
 @section('script')
     <script>
@@ -241,6 +254,43 @@
 
                 }
 
+            });
+            //ADD orphans excel
+            $('#add-excel-orphans-form').on('submit', function(e){
+                e.preventDefault();
+                var form = this;
+                $.ajax({
+                    url:$(form).attr('action'),
+                    method:$(form).attr('method'),
+                    data:new FormData(form),
+                    processData:false,
+                    dataType:'json',
+                    contentType:false,
+                    beforeSend:function(){
+                        $(form).find('span.error-text').text('');
+                        document.getElementById('errors_excel').innerHTML = '';
+                    },
+                    success:function(data){
+                        if(data.code == 0){
+                            $.each(data.error, function(prefix, val){
+                                $(form).find('span.'+prefix+'_error').text(val[0]);
+                            });
+                            toastr.error(data.msg);
+                        }else if(data.code == 1){
+                            const list = document.getElementById('errors_excel');
+                            list.innerHTML = data.errors;
+                            toastr.success(data.msg);
+                            if(data.isAllAdded){
+                                console.log(data.isAllAdded);
+                                $('.addExcelOrphans').modal('hide');
+                                $('.addExcelOrphans').find('form')[0].reset();
+                                document.getElementsByClassName('custom-file-label')[0].innerHTML = 'اختر الملف';
+
+                            }
+                            $('#orphans-table').DataTable().ajax.reload(null, true);
+                        }
+                    }
+                });
             });
         });
 

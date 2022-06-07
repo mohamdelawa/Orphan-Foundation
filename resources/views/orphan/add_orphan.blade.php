@@ -22,6 +22,11 @@
                                     <span class="text-danger error-text col-md-6 orphanName_error"></span>
                                 </div>
                                 <div class="form-group row">
+                                    <label for="orphanNameEn" class="col-md-2"><b>اسم اليتيم (الانجليزية)</b><span style="color: red">*</span></label>
+                                    <input type="text" class="form-control col-md-5 mr-md-3 " required id="orphanNameEn" name="orphanNameEn" >
+                                    <span class="text-danger error-text col-md-6 orphanNameEn_error"></span>
+                                </div>
+                                <div class="form-group row">
                                     <label for="orphanIdentity" class="col-md-2"><b>رقم هوية اليتيم </b><span style="color: red">*</span></label>
                                     <input type="number" class="form-control col-md-5 mr-md-3 " required id="orphanIdentity" name="orphanIdentity" >
                                     <span class="text-danger error-text col-md-6 orphanIdentity_error"></span>
@@ -60,6 +65,11 @@
                                     <label for="breadwinnerName" class="col-md-2"><b>اسم المعيل</b><span style="color: red">*</span></label>
                                     <input type="text" class="form-control col-md-5 mr-md-3 " required id="breadwinnerName" name="breadwinnerName" >
                                     <span class="text-danger error-text col-md-6 breadwinnerName_error"></span>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="breadwinnerNameEn" class="col-md-2"><b>اسم المعيل(الانجليزية)</b><span style="color: red">*</span></label>
+                                    <input type="text" class="form-control col-md-5 mr-md-3 " required id="breadwinnerNameEn" name="breadwinnerNameEn" >
+                                    <span class="text-danger error-text col-md-6 breadwinnerNameEn_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="breadwinnerIdentity" class="col-md-2"><b>رقم هوية المعيل</b><span style="color: red">*</span></label>

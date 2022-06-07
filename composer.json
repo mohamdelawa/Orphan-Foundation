@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-json": "*",
         "barryvdh/laravel-dompdf": "^1.0",
         "carlos-meneses/laravel-mpdf": "^2.1",
         "cyber-duck/laravel-excel": "^2.2",
@@ -15,8 +16,8 @@
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
-        "yajra/laravel-datatables-oracle": "^9.19",
-      "ext-json": "*"
+        "yajra/laravel-datatables-buttons": "^4.13",
+        "yajra/laravel-datatables-oracle": "^9.19"
     },
     "require-dev": {
         "facade/ignition": "^2.5",

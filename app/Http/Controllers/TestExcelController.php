@@ -1,7 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\ImageGallery;
 use App\Models\Orphan;
+use App\Models\Payment;
+use App\Models\PaymentOrphan;
+use App\Models\Permission;
+use App\Models\PermissionUser;
+use App\Models\Role;
+use App\Models\TypeImage;
+use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\View;
@@ -170,4 +178,5 @@ class TestExcelController extends Controller
 
 
     }
+
 }

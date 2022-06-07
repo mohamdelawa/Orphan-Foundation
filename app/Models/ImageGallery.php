@@ -10,14 +10,14 @@ class ImageGallery extends Model
     use HasFactory;
     public function user()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class);
     }
     public function orphan()
     {
-        return $this->belongsTo(Orphan::class, 'id');
+        return $this->belongsTo(Orphan::class);
     }
     public function typeImage()
     {
-        return $this->belongsTo(TypeImage::class, 'id');
+        return $this->belongsTo(TypeImage::class);
     }
 }

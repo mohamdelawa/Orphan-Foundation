@@ -68,32 +68,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('orphans.list')}}" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>
                         <p>الأيتام
-                            <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('orphans.list')}}" class="nav-link">
-                                <i class="fas fa-th nav-icon"></i>
-                                <p>الأيتام</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('form.add.orphan')}}" class="nav-link">
-                                <i class="nav-icon fas fa-plus"></i>
-                                <p>اضافة يتيم</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('form.import.excel.orphans')}}" class="nav-link">
-                                <i class="fas fa-file-excel nav-icon"></i>
-                                <p>اضافة أيتام اكسل</p>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
@@ -117,6 +96,20 @@
                             </a>
                         </li>
                     </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('type.images.list')}}" class="nav-link">
+                        <i class="nav-icon fas fa-image"></i>
+                        <p>نوع الصور
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{route('permissions.list')}}" class="nav-link">
+                        <i class="nav-icon fas fa-shield-alt"></i>
+                        <p>الصلاحيات
+                        </p>
+                    </a>
                 </li>
             </ul>
         </nav>

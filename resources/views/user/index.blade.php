@@ -32,8 +32,8 @@
 
             </div>
         </div>
-        @include('user/add-user-modal')
-        @include('user/edit-user-modal')
+        @include('user.add-user-modal')
+        @include('user.edit-user-modal')
 @endsection
 @section('script')
     <script>
