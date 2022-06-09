@@ -296,14 +296,14 @@
                 $('input[name="permission_user_checkbox"]:checked').each(function(){
                     checkedPermissionsUser.push($(this).data('id'));
                 });
+
                 $('input[name="permission_user_checkbox"]:not(:checked)').each(function(){
                     uncheckedPermissionsUser.push($(this).data('id'));
                 });
-
                  var url = '{{route("add.permissions.user")}}';
-                  $.post(url,{checked_permissions_user:checkedPermissionsUser, user_id:user_id_permission},function(data){
+                  $.post(url,{checked_permissions_user:checkedPermissionsUser, user_id:user_id_permission, unchecked_permissions_user:uncheckedPermissionsUser},function(data){
                                 if(data.code == 1){
-                                   // $('#permissions-user-table').DataTable().ajax.reload(null, true);
+                                    $('#permissions-user-table').DataTable().ajax.reload(null, true);
                                     toastr.success(data.msg);
                                 }
                             },'json');

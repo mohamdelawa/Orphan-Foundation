@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/import', 'TestExcelController@importFile')->name('import');
+Route::get('/import', 'TestExcelController@test')->name('import');
 Route::post('/import', 'TestExcelController@importExcel');
 Route::get('/reportOrphan/{id}', 'TestExcelController@reportOrphan')->name('reportOrphan');
 Route::get('/report', 'TestExcelController@pdf')->name('pdf');
@@ -101,6 +101,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/getPermissionsUserList','Permission\PermissionUserController@getPermissionsUserList')->name('get.permissions.user.list');
         Route::post('/addPermissionsUser','Permission\PermissionUserController@addPermissionsUser')->name('add.permissions.user');
 
+    });
+    Route::prefix('permissionsUsers')->middleware('IsPermissionsUsersPage')->group(function (){
+        Route::get('/getPermissionsUserList','Permission\PermissionUserController@getPermissionsUserList')->name('get.permissions.user.list');
+        Route::post('/addPermissionsUser','Permission\PermissionUserController@addPermissionsUser')->name('add.permissions.user');
     });
 });
 

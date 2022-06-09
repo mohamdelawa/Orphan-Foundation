@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'IsOrphansPage' => \App\Http\Middleware\IsOrphansPage::class,
         'IsTypeImagesPage' => \App\Http\Middleware\IsTypeImagesPage::class,
         'IsPermissionsPage' => \App\Http\Middleware\IsPermissionsPage::class,
+        'IsPermissionsUsersPage' => \App\Http\Middleware\IsPermissionsPage::class,
         'IsPaymentsPage' => \App\Http\Middleware\IsPaymentsPage::class,
         'IsPaymentsOrphansPage' => \App\Http\Middleware\IsPaymentsOrphansPage::class,
     ];

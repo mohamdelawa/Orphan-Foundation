@@ -47,7 +47,7 @@ class PermissionController extends Controller
     }
     // GET ALL Permissions
     public function getPermissionsList(Request $request){
-        $permission = Permission::all();
+        $permission = Permission::orderBy('group')->get();
         return DataTables::of($permission)
             ->addIndexColumn()
             ->addColumn('user_name', function($row){

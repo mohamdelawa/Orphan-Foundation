@@ -27,7 +27,8 @@ class PermissionUserController extends Controller
                 return  $user_name ;
             })
             ->addColumn('checkbox', function($row) use ($userId){
-                if(PermissionUser::all()->where('user_id','=',$row->userId)->where('permission_id','=',$row->permission_id)->count() ==1){
+                $permissions = PermissionUser::all()->where('user_id','=',$userId)->where('permission_id','=',$row['permission_id']);
+                if($permissions->count() == 1){
                     return '<input type="checkbox" name="permission_user_checkbox" checked data-id="'.$row['permission_id'].'"><label></label>';
                 }
                 return '<input type="checkbox" name="permission_user_checkbox"  data-id="'.$row['permission_id'].'"><label></label>';
@@ -37,19 +38,25 @@ class PermissionUserController extends Controller
     }
     public function addPermissionsUser(Request $request){
         $checkedPermissionsUser = $request->checked_permissions_user;
-        if(Permission::whereIn('id', $checkedPermissionsUser)->count() == sizeof($checkedPermissionsUser)){
-            foreach ($checkedPermissionsUser as $permission){
-                if(PermissionUser::all()->where('user_id','=',$request->user_id)->where('permission_id','=',$permission)->count() ==0){
-                    $permissionUser = new PermissionUser();
-                    $permissionUser->permission_id = $permission;
-                    $permissionUser->user_id = $request->user_id;
-                    $permissionUser->add_user_id = auth()->user()->id;
-                    $permissionUser->save();
-                }
+        $uncheckedPermissionsUser = $request->unchecked_permissions_user;
+        if($uncheckedPermissionsUser){
+            PermissionUser::where('user_id','=',$request->user_id)->whereIn('permission_id', $uncheckedPermissionsUser)->delete();
+        }
+        if($checkedPermissionsUser) {
+            if (Permission::whereIn('id',$checkedPermissionsUser)->count() == sizeof($checkedPermissionsUser)) {
+                foreach ($checkedPermissionsUser as $permission) {
+                    if (PermissionUser::all()->where('user_id','=',$request->user_id)->where('permission_id','=',$permission)->count() == 0) {
+                        $permissionUser = new PermissionUser();
+                        $permissionUser->permission_id = $permission;
+                        $permissionUser->user_id = $request->user_id;
+                        $permissionUser->add_user_id = auth()->user()->id;
+                        $permissionUser->save();
+                    }
 
+                }
             }
         }
-        return response()->json(['code'=>1, 'msg'=>'تمت إضافة الصلاحيات بنجاح']);
+        return response()->json(['code'=>1, 'msg'=>'تمت إعطاء الصلاحيات بنجاح']);
     }
 
 }

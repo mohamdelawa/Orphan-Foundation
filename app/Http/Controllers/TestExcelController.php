@@ -40,6 +40,8 @@ class TestExcelController extends Controller
         return view('excel.excelCode', compact(['orphans']));
     }
     public function importExcel(Request $request){
+
+
         $validator = Validator::make($request->all(), [
          'file' => 'required|max:5000|mimes:xlsx,xls,csv'
         ]);
@@ -178,5 +180,16 @@ class TestExcelController extends Controller
 
 
     }
+    function  test(){
+        $permissions = Permission::all();
+        foreach ($permissions as $permission){
+            $permission_user = new PermissionUser();
+            $permission_user->permission_id = $permission->id;
+            $permission_user->user_id = 1;
+            $permission_user->add_user_id = 1;
+            $permission_user->save();
 
+        }
+
+    }
 }
