@@ -35,7 +35,7 @@ class LoginController extends Controller
             $user->save();
            // \Illuminate\Support\Facades\Cookie::queue('active_user',60*60*24);
 
-            return redirect()->route('orphans.list');
+            return redirect()->route('dashboard');
         }
         return redirect()->back()->withInput()->with('error','فشلت عملية تسجيل الدخول.اسم المستخدم أو كلمة السر غير صحيحة!');
     }

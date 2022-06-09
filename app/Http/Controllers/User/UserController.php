@@ -70,9 +70,10 @@ class UserController extends Controller
             })
             ->addColumn('actions', function($row){
                 return '<div class="btn-group">
-                                                <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editUserBtn" style="margin: 5px">تعديل</button>
-                                                <button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteUserBtn" style="margin: 5px">حذف</button>
-                                          </div>';
+                           <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editUserBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>
+                           <button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteUserBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>
+                           <button class="btn btn-sm btn-secondary" data-id="'.$row['id'].'" id="permissionUserBtn" style="margin: 5px">الصلاحيات<i class="nav-icon fas fa-shield-alt" style="margin: 3px"></i></button>
+                        </div>';
             })
             ->addColumn('checkbox', function($row){
                 return '<input type="checkbox" name="user_checkbox" data-id="'.$row['id'].'"><label></label>';

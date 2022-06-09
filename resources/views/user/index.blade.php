@@ -34,6 +34,7 @@
         </div>
         @include('user.add-user-modal')
         @include('user.edit-user-modal')
+        @include('user.permissions-user-modal')
 @endsection
 @section('script')
     <script>
@@ -234,6 +235,78 @@
                         }
                     })
                 }
+            });
+            var  user_id_permission = 0;
+            $(document).on('click','#permissionUserBtn', function(){
+               var user_id = $(this).data('id');
+                user_id_permission = $(this).data('id');
+                $('.permissionsUser').modal('show');
+                var table = $('#permissions-user-table').DataTable();
+                table.destroy();
+                table =   $('#permissions-user-table').DataTable({
+                    processing:true,
+                    info:false,
+                    "bPaginate": false,
+                    searching: false,
+                    ajax:{
+                        'url':"{{ route('get.permissions.user.list') }}",
+                        'data' :{
+                            'user_id':user_id,
+                        }
+                    },
+                    "pageLength":5,
+                    "aLengthMenu":[[5,10,25,50,-1],[5,10,25,50,"All"]],
+                    columns:[
+                        {data:'DT_RowIndex', name:'DT_RowIndex'},
+                        {data:'checkbox', name:'checkbox', orderable:false, searchable:false},
+                        {data:'name', name:'name'},
+                        {data:'user_name', name:'user_name'},
+                    ]
+                }).on('draw', function(){
+                    $('input[name="permissions_user_checkbox"]').each(function(){this.checked = false;});
+                    $('input[name="permission_user_main_checkbox"]').prop('checked', false);
+                });
+            });
+
+            $(document).on('click','input[name="permission_user_main_checkbox"]', function(){
+                if(this.checked){
+                    $('input[name="permission_user_checkbox"]').each(function(){
+                        this.checked = true;
+                    });
+                }else{
+                    $('input[name="permission_user_checkbox"]').each(function(){
+                        this.checked = false;
+                    });
+                }
+                toggledeleteAllBtn();
+            });
+
+            $(document).on('change','input[name="permission_user_checkbox"]', function(){
+
+                if( $('input[name="permission_user_checkbox"]').length == $('input[name="permission_user_checkbox"]:checked').length ){
+                    $('input[name="permission_user_main_checkbox"]').prop('checked', true);
+                }else{
+                    $('input[name="permission_user_main_checkbox"]').prop('checked', false);
+                }
+
+            });
+            $(document).on('click','button#clickAllPermissionsBtn', function(){
+                var checkedPermissionsUser = [];
+                var uncheckedPermissionsUser = [];
+                $('input[name="permission_user_checkbox"]:checked').each(function(){
+                    checkedPermissionsUser.push($(this).data('id'));
+                });
+                $('input[name="permission_user_checkbox"]:not(:checked)').each(function(){
+                    uncheckedPermissionsUser.push($(this).data('id'));
+                });
+
+                 var url = '{{route("add.permissions.user")}}';
+                  $.post(url,{checked_permissions_user:checkedPermissionsUser, user_id:user_id_permission},function(data){
+                                if(data.code == 1){
+                                   // $('#permissions-user-table').DataTable().ajax.reload(null, true);
+                                    toastr.success(data.msg);
+                                }
+                            },'json');
             });
         });
     </script>

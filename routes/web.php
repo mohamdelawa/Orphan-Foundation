@@ -8,7 +8,10 @@ Route::get('/reportOrphan/{id}', 'TestExcelController@reportOrphan')->name('repo
 Route::get('/report', 'TestExcelController@pdf')->name('pdf');
 
 Route::middleware('auth')->group(function () {
-    Route::prefix('orphans')->group(function () {
+    Route::get('dashboard',function (){
+        return view('dashboard');
+    })->name('dashboard');
+    Route::prefix('orphans')->middleware('IsOrphansPage')->group(function () {
         Route::get('/', 'Orphan\OrphanController@index')->name('orphans.list');
         Route::get('/searchOrphans', 'Orphan\OrphanController@searchOrphans')->name('searchOrphans');
         Route::get('/getOrphansList','Orphan\OrphanController@getOrphansList')->name('get.orphans.list');
@@ -35,7 +38,7 @@ Route::middleware('auth')->group(function () {
 
 
     });
-    Route::prefix('roles')->group(function (){
+    Route::prefix('roles')->middleware('IsRolesPage')->group(function (){
         Route::get('/','User\RoleController@index')->name('roles.list');
         Route::post('/add-role','User\RoleController@store')->name('add.role');
         Route::get('/getRolesList','User\RoleController@getRolesList')->name('get.roles.list');
@@ -45,7 +48,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/deleteSelectedRoles','User\RoleController@deleteSelectedRoles')->name('delete.selected.roles');
 
     });
-    Route::prefix('users')->group(function (){
+    Route::prefix('users')->middleware('IsUsersPage')->group(function (){
         Route::get('/','User\UserController@index')->name('users.list');
         Route::post('/add-user','User\UserController@store')->name('add.user');
         Route::get('/getUsersList','User\UserController@getUsersList')->name('get.users.list');
@@ -55,7 +58,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/deleteSelectedUsers','User\UserController@deleteSelectedUsers')->name('delete.selected.users');
 
     });
-    Route::prefix('payments')->group(function (){
+    Route::prefix('payments')->middleware('IsPaymentsPage')->group(function (){
         Route::get('/','Payment\PaymentController@index')->name('payments.list');
         Route::post('/add-payment','Payment\PaymentController@store')->name('add.payment');
         Route::get('/getPaymentsList','Payment\PaymentController@getPaymentsList')->name('get.payments.list');
@@ -63,20 +66,21 @@ Route::middleware('auth')->group(function () {
         Route::post('/updatePaymentDetails','Payment\PaymentController@update')->name('update.payment.details');
         Route::post('/deletePayment','Payment\PaymentController@deletePayment')->name('delete.payment');
         Route::post('/deleteSelectedPayments','Payment\PaymentController@deleteSelectedPayments')->name('delete.selected.payments');
-        Route::prefix('paymentsOrphans')->group(function (){
-            Route::get('/', 'Payment\PaymentOrphanController@index')->name('paymentOrphans.list');
-            Route::get('/searchOrphans', 'Payment\PaymentOrphanController@searchPaymentOrphans')->name('searchPaymentOrphans');
-            Route::get('/getPaymentOrphansList','Payment\PaymentOrphanController@getPaymentOrphansList')->name('get.payment.orphans.list');
-            Route::post('/getPaymentOrphanDetails','Payment\PaymentOrphanController@getPaymentOrphanDetails')->name('get.payment.orphan.details');
-            Route::get('/searchPaymentsOrphans', 'Payment\PaymentOrphanController@searchPaymentsOrphans')->name('searchPaymentsOrphans');
-            Route::post('/storePaymentOrphan', 'Payment\PaymentOrphanController@store')->name('add.payment.orphan');
-            Route::post('/updatePaymentOrphan', 'Payment\PaymentOrphanController@update')->name('update.payment.orphan.details');
-            Route::post('/deletePaymentOrphan','Payment\PaymentOrphanController@deletePaymentOrphan')->name('delete.payment.orphan');
-            Route::post('/deleteSelectedPaymentOrphans','Payment\PaymentOrphanController@deleteSelectedPaymentOrphans')->name('delete.selected.payments_orphans');
-            Route::post('/addExcelPaymentsOrphans','Payment\ImportExcelPaymentsOrphansController@store')->name('add.excel.payments.orphans');
-        });
+
     });
-    Route::prefix('typeImages')->group(function (){
+    Route::prefix('paymentsOrphans')->middleware('IsPaymentsOrphansPage')->group(function (){
+        Route::get('/', 'Payment\PaymentOrphanController@index')->name('paymentOrphans.list');
+        Route::get('/searchOrphans', 'Payment\PaymentOrphanController@searchPaymentOrphans')->name('searchPaymentOrphans');
+        Route::get('/getPaymentOrphansList','Payment\PaymentOrphanController@getPaymentOrphansList')->name('get.payment.orphans.list');
+        Route::post('/getPaymentOrphanDetails','Payment\PaymentOrphanController@getPaymentOrphanDetails')->name('get.payment.orphan.details');
+        Route::get('/searchPaymentsOrphans', 'Payment\PaymentOrphanController@searchPaymentsOrphans')->name('searchPaymentsOrphans');
+        Route::post('/storePaymentOrphan', 'Payment\PaymentOrphanController@store')->name('add.payment.orphan');
+        Route::post('/updatePaymentOrphan', 'Payment\PaymentOrphanController@update')->name('update.payment.orphan.details');
+        Route::post('/deletePaymentOrphan','Payment\PaymentOrphanController@deletePaymentOrphan')->name('delete.payment.orphan');
+        Route::post('/deleteSelectedPaymentOrphans','Payment\PaymentOrphanController@deleteSelectedPaymentOrphans')->name('delete.selected.payments_orphans');
+        Route::post('/addExcelPaymentsOrphans','Payment\ImportExcelPaymentsOrphansController@store')->name('add.excel.payments.orphans');
+    });
+    Route::prefix('typeImages')->middleware('IsTypeImagesPage')->group(function (){
         Route::get('/','User\TypeImageController@index')->name('type.images.list');
         Route::post('/add-type-images','User\TypeImageController@store')->name('add.type.image');
         Route::get('/getTypeImagesList','User\TypeImageController@getTypeImagesList')->name('get.type.images.list');
@@ -86,7 +90,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/deleteSelectedTypeImageS','User\TypeImageController@deleteSelectedTypeImages')->name('delete.selected.type.images');
 
     });
-    Route::prefix('permissions')->group(function (){
+    Route::prefix('permissions')->middleware('IsPermissionsPage')->group(function (){
         Route::get('/','Permission\PermissionController@index')->name('permissions.list');
         Route::post('/add-permission','Permission\PermissionController@store')->name('add.permission');
         Route::get('/getPermissionsList','Permission\PermissionController@getPermissionsList')->name('get.permissions.list');
@@ -94,6 +98,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/updatePermissionDetails','Permission\PermissionController@update')->name('update.permission.details');
         Route::post('/deletePermission','Permission\PermissionController@deletePermission')->name('delete.permission');
         Route::post('/deleteSelectedPermissions','Permission\PermissionController@deleteSelectedPermissions')->name('delete.selected.permissions');
+        Route::get('/getPermissionsUserList','Permission\PermissionUserController@getPermissionsUserList')->name('get.permissions.user.list');
+        Route::post('/addPermissionsUser','Permission\PermissionUserController@addPermissionsUser')->name('add.permissions.user');
 
     });
 });

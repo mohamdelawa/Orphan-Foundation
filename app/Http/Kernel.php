@@ -63,5 +63,12 @@ class Kernel extends HttpKernel
         'signed' => \Illuminate\Routing\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'IsUsersPage' => \App\Http\Middleware\IsUsersPage::class,
+        'IsRolesPage' => \App\Http\Middleware\IsRolesPage::class,
+        'IsOrphansPage' => \App\Http\Middleware\IsOrphansPage::class,
+        'IsTypeImagesPage' => \App\Http\Middleware\IsTypeImagesPage::class,
+        'IsPermissionsPage' => \App\Http\Middleware\IsPermissionsPage::class,
+        'IsPaymentsPage' => \App\Http\Middleware\IsPaymentsPage::class,
+        'IsPaymentsOrphansPage' => \App\Http\Middleware\IsPaymentsOrphansPage::class,
     ];
 }

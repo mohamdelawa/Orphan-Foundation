@@ -45,8 +45,8 @@ class RoleController extends Controller
                               ->addIndexColumn()
                               ->addColumn('actions', function($row){
                                   return '<div class="btn-group">
-                                                <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editRoleBtn" style="margin: 5px">تعديل</button>
-                                                <button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteRoleBtn" style="margin: 5px">حذف</button>
+                                                <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editRoleBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>
+                                                <button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteRoleBtn" style="margin: 5px"> حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>
                                           </div>';
                               })
                               ->addColumn('checkbox', function($row){
