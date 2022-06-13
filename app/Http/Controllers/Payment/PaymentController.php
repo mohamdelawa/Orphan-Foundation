@@ -8,6 +8,7 @@ use App\Models\PaymentOrphan;
 use App\Models\User;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Gate;
 
 class PaymentController extends Controller
 {
@@ -78,10 +79,15 @@ class PaymentController extends Controller
                 return  $user_name ;
             })
             ->addColumn('actions', function($row){
-                return '<div class="btn-group">
-                                                <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editPaymentBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>
-                                                <button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deletePaymentBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>
-                                          </div>';
+                $btn_group = '<div class="btn-group">';
+                if (Gate::allows('EditPayment')) {
+                    $btn_group.= '<button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editPaymentBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>';
+                }
+                if(Gate::allows('DeletePayment')){
+                    $btn_group.= '<button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deletePaymentBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>';
+                }
+                $btn_group .='</div>';
+                return $btn_group;
             })
             ->addColumn('checkbox', function($row){
                 return '<input type="checkbox" name="payment_checkbox" data-id="'.$row['id'].'"><label></label>';

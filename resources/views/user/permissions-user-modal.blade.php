@@ -8,6 +8,9 @@
                 </button>
             </div>
             <div class="modal-body " style="direction: rtl; text-align: right">
+                <div class="row" style="margin: 10px; direction: ltr">
+                    <button class="btn btn-sm btn-primary  col-md-1" id="clickAllPermissionsBtn">حفظ</button>
+                </div>
                 <div class=" table-responsive row" style="text-align: right">
                                 <table class="table table-hover table-condensed " id="permissions-user-table" style="direction: rtl; text-align: center;width: 100%">
                                     <thead><th style="text-align: center">#</th>
@@ -18,9 +21,7 @@
                                     <tbody></tbody>
                                 </table>
                             </div>
-                <div class="row" style="margin: 10px;">
-                    <button class="btn btn-sm btn-primary  col-md-1" id="clickAllPermissionsBtn">حفظ</button>
-                </div>
+
             </div>
         </div>
 

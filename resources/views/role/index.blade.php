@@ -6,7 +6,9 @@
                     <div class="card">
                         <div class="card-header" style="text-align: right;">
                             <div class="col-md-1" >
+                                @can('AddRole')
                                 <button class="btn btn-primary  " data-toggle="modal" data-target="#addRole"><i class="nav-icon fas fa-plus"></i></button>
+                                @endcan
                             </div>
                             <div class="col-md-11" >
                                 <span>المناصب</span>
@@ -27,9 +29,12 @@
                 </div>
             </div>
         </div>
-
+        @can('EditRole')
     @include('role.edit-role-modal')
+    @endcan
+    @can('AddRole')
     @include('role.add-role-modal')
+    @endcan
 
 @endsection
 @section('script')

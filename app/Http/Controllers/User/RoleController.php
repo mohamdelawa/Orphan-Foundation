@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Gate;
 
 class RoleController extends Controller
 {
@@ -44,10 +45,15 @@ class RoleController extends Controller
           return DataTables::of($roles)
                               ->addIndexColumn()
                               ->addColumn('actions', function($row){
-                                  return '<div class="btn-group">
-                                                <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editRoleBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>
-                                                <button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteRoleBtn" style="margin: 5px"> حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>
-                                          </div>';
+                                  $btn_group = '<div class="btn-group">';
+                                  if (Gate::allows('EditRole')) {
+                                      $btn_group.= '  <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editRoleBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>';
+                                  }
+                                  if(Gate::allows('DeleteRole')){
+                                      $btn_group.= '<button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteRoleBtn" style="margin: 5px"> حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>';
+                                  }
+                                  $btn_group .='</div>';
+                                  return $btn_group;
                               })
                               ->addColumn('checkbox', function($row){
                                   return '<input type="checkbox" name="role_checkbox" data-id="'.$row['id'].'"><label></label>';

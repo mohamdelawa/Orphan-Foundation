@@ -37,8 +37,15 @@
                                     </a>
 
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="text-align: right">
-                                        <a class="dropdown-item" href="{{route('form.add.orphan')}}">إضافة يتيم<i class="nav-icon fas fa-plus" style="margin: 5px"></i></a>
+                                        @can('AddOrphan')
+                                            <a class="dropdown-item" href="{{route('form.add.orphan')}}">إضافة يتيم<i class="nav-icon fas fa-plus" style="margin: 5px"></i></a>
+                                        @endcan
+                                            @can('AddExcelOrphans')
                                         <a class="dropdown-item" data-toggle="modal" data-target="#addExcelOrphans">استيراد من اكسل<i class="nav-icon fas fa-file-excel" style="margin: 5px"></i></a>
+                                    @endcan
+                                            @can('ExportExcelOrphans')
+                                                <a class="dropdown-item" href="{{route('export.excel.orphans')}}" id="ExportExcelOrphans"> تصدير اكسل<i class="nav-icon fas fa-file-download" style="margin: 5px"></i></a>
+                                            @endcan
                                     </div>
                                 </div>
                             </div>
@@ -61,8 +68,9 @@
                 </div>
             </div>
         </div>
-
+        @can('AddExcelOrphans')
         @include('orphan.add-excel-orphans-modal')
+        @endcan
 @endsection
 @section('script')
     <script>

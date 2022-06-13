@@ -6,7 +6,9 @@
                     <div class="card">
                         <div class="card-header row" style="text-align: right;">
                             <div class="col-md-1" >
+                                @can('AddTypeImage')
                                 <button class="btn btn-primary  " data-toggle="modal" data-target="#addTypeImage"><i class="nav-icon fas fa-plus"></i></button>
+                            @endcan
                             </div>
                             <div class="col-md-11" >
                                 <span>أنواع الصور</span>
@@ -28,9 +30,12 @@
                 </div>
             </div>
         </div>
-
+ @can('AddTypeImage')
     @include('typeImage.add-type-image-modal')
+    @endcan
+        @can('EditTypeImage')
     @include('typeImage.edit-type-image-modal')
+    @endcan
 
 @endsection
 @section('script')

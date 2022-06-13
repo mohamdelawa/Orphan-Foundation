@@ -7,7 +7,9 @@
                         <div class="card-header row " style="text-align: right;">
 
                             <div class="col-md-1" >
+                                @can('AddPayment')
                                 <button class="btn btn-primary  " data-toggle="modal" data-target="#addPayment"><i class="nav-icon fas fa-plus"></i></button>
+                                    @endcan
                             </div>
                             <div class="col-md-11" >
                                 <span class="">الصرفيات</span>
@@ -36,8 +38,12 @@
 
             </div>
         </div>
+        @can('AddPayment')
         @include('payment.add-payment-modal')
+        @endcan
+        @can('EditPayment')
         @include('payment.edit-payment-modal')
+    @endcan
 @endsection
 @section('script')
     <script>

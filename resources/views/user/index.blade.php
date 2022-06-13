@@ -6,9 +6,12 @@
                     <div class="card">
                         <div class="card-header row " style="text-align: right;">
 
-                            <div class="col-md-1" >
-                                <button class="btn btn-primary  " data-toggle="modal" data-target="#addUser"><i class="nav-icon fas fa-plus"></i></button>
-                            </div>
+                                <div class="col-md-1" >
+                                    @can('AddUser')
+                                    <button class="btn btn-primary  " data-toggle="modal" data-target="#addUser"><i class="nav-icon fas fa-plus"></i></button>
+                                    @endcan
+                                </div>
+
                             <div class="col-md-11" >
                                 <span class="">المستخدمون</span>
                             </div>
@@ -32,9 +35,15 @@
 
             </div>
         </div>
-        @include('user.add-user-modal')
+        @can('AddUser')
+            @include('user.add-user-modal')
+        @endcan
+        @can('EditUser')
         @include('user.edit-user-modal')
+        @endcan
+        @can('AddPermissionsUser')
         @include('user.permissions-user-modal')
+        @endcan
 @endsection
 @section('script')
     <script>
@@ -258,7 +267,7 @@
                     "aLengthMenu":[[5,10,25,50,-1],[5,10,25,50,"All"]],
                     columns:[
                         {data:'DT_RowIndex', name:'DT_RowIndex'},
-                        {data:'checkbox', name:'checkbox', orderable:false, searchable:false},
+                        {data:'checkbox', name:'checkbox', orderable:false, searchable:true},
                         {data:'name', name:'name'},
                         {data:'user_name', name:'user_name'},
                     ]
@@ -303,8 +312,8 @@
                  var url = '{{route("add.permissions.user")}}';
                   $.post(url,{checked_permissions_user:checkedPermissionsUser, user_id:user_id_permission, unchecked_permissions_user:uncheckedPermissionsUser},function(data){
                                 if(data.code == 1){
-                                    $('#permissions-user-table').DataTable().ajax.reload(null, true);
-                                    toastr.success(data.msg);
+                                    $('.permissionsUser').modal('hide');
+                                   toastr.success(data.msg);
                                 }
                             },'json');
             });

@@ -26,12 +26,12 @@
                     <a href="{{route('dashboard')}}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>
-                            Dashboard
-                            <i class="right fas fa-angle-left"></i>
+                            الرئيسية
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                @can('UsersPage')
+                    <li class="nav-item">
                     <a href="{{route('users.list')}}" class="nav-link">
                         <i class="nav-icon fas fa-user-friends"></i>
                         <p>
@@ -39,7 +39,9 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                @endcan
+                @can('RolesPage')
+                    <li class="nav-item">
                     <a href="{{route('roles.list')}}" class="nav-link">
                         <i class="nav-icon fas fa-address-card"></i>
                         <p>
@@ -47,14 +49,18 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                @endcan
+                @can('OrphansPage')
+                    <li class="nav-item">
                     <a href="{{route('orphans.list')}}" class="nav-link">
                         <i class="nav-icon fas fa-user"></i>
                         <p>الأيتام
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                @endcan
+                @can('Payments')
+                    <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-coins"></i>
                         <p>
@@ -63,34 +69,43 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
+                        @can('PaymentsPage')
+                            <li class="nav-item">
                             <a href="{{route('payments.list')}}" class="nav-link">
                                 <i class="fas fa-th nav-icon"></i>
                                 <p>الصرفيات</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        @endcan
+                        @can('PaymentsOrphansPage')
+                            <li class="nav-item">
                             <a href="{{route('paymentOrphans.list')}}" class="nav-link">
                                 <i class="fas fa-th nav-icon"></i>
                                 <p>صرفيات الأيتام</p>
                             </a>
                         </li>
+                        @endcan
                     </ul>
                 </li>
-                <li class="nav-item">
+                @endcan
+                @can('TypeImagesPage')
+                    <li class="nav-item">
                     <a href="{{route('type.images.list')}}" class="nav-link">
                         <i class="nav-icon fas fa-image"></i>
                         <p>نوع الصور
                         </p>
                     </a>
                 </li>
-                <li class="nav-item">
+                @endcan
+                @can('PermissionsPage')
+                    <li class="nav-item">
                     <a href="{{route('permissions.list')}}" class="nav-link">
                         <i class="nav-icon fas fa-shield-alt"></i>
                         <p>الصلاحيات
                         </p>
                     </a>
                 </li>
+                @endcan
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

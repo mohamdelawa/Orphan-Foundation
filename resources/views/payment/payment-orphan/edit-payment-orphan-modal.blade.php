@@ -39,7 +39,7 @@
                              <span class="text-danger error-text warrantyValue_error col-md-8"></span>
                          </div>
                          <div class="form-group row">
-                             <button type="submit" class="btn btn-block btn-primary">حفظ التعديلات</button>
+                             <button type="submit" class="btn btn-block btn-primary col-md-3">حفظ التعديلات</button>
                          </div>
                      </div>
                  </form>

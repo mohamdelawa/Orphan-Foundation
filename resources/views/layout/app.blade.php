@@ -19,5 +19,15 @@
 <script src="{{asset('asset/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('asset/dist/js/adminlte.min.js')}}"></script>
+<script>
+    @if(Session::has('error'))
+        toastr.options =
+        {
+            "closeButton" : true,
+            "progressBar" : true
+        }
+    toastr.error("{{ session('error') }}");
+    @endif
+</script>
 </body>
 </html>

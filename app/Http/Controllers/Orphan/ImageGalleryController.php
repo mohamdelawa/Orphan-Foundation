@@ -7,6 +7,7 @@ use App\Models\ImageGallery;
 use App\Models\Orphan;
 use App\Models\TypeImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
 
@@ -62,10 +63,15 @@ class ImageGalleryController extends Controller
                 return '<img src="'.asset('/images/'.$row->path).'" width="150" height="150">';
             })
             ->addColumn('actions', function($row){
-                return '<div class="btn-group">
-                                                <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editImageBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>
-                                                <button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteImageBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>
-                                          </div>';
+                $btn_group = '<div class="btn-group">';
+                if (Gate::allows('EditImageForOrphan')) {
+                    $btn_group.= '<button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editImageBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>';
+                }
+                if(Gate::allows('DeleteImageForOrphan')){
+                    $btn_group.= '<button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteImageBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>';
+                }
+                $btn_group .='</div>';
+                return $btn_group;
             })
             ->addColumn('checkbox', function($row){
                 return '<input type="checkbox" name="image_checkbox" data-id="'.$row['id'].'"><label></label>';

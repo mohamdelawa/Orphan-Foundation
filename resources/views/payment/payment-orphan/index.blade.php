@@ -42,8 +42,12 @@
                                 </a>
 
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="text-align: right">
+                                    @can('AddPaymentOrphan')
                                     <a class="dropdown-item" data-toggle="modal" data-target="#addPaymentOrphan"> إضافة صرفية ليتيم<i class="nav-icon fas fa-plus" style="margin: 5px"></i></a>
-                                    <a class="dropdown-item" data-toggle="modal" data-target="#addExcelPaymentsOrphans">استيراد من اكسل<i class="nav-icon fas fa-file-excel" style="margin: 5px"></i></a>
+                                    @endcan
+                                    @can('AddExcelPaymentOrphan')
+                                        <a class="dropdown-item" data-toggle="modal" data-target="#addExcelPaymentsOrphans">استيراد من اكسل<i class="nav-icon fas fa-file-excel" style="margin: 5px"></i></a>
+                                @endcan
                                 </div>
                             </div>
                             </div>
@@ -76,9 +80,15 @@
 
         </div>
     </div>
+    @can('AddPaymentOrphan')
     @include('payment.payment-orphan.add-payment-orphan-modal')
+    @endcan
+    @can('EditPaymentOrphan')
     @include('payment.payment-orphan.edit-payment-orphan-modal')
+    @endcan
+    @can('AddExcelPaymentOrphan')
     @include('payment.payment-orphan.add-excel-payments-orphans-modal')
+    @endcan
 @endsection
 @section('script')
     <script>

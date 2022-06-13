@@ -1,21 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\ImageGallery;
 use App\Models\Orphan;
-use App\Models\Payment;
-use App\Models\PaymentOrphan;
-use App\Models\Permission;
-use App\Models\PermissionUser;
-use App\Models\Role;
-use App\Models\TypeImage;
-use App\Models\User;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\View;
 use Importer;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use Exporter;
 use Mpdf\Mpdf;
 use PDF;
 
@@ -34,83 +26,6 @@ class TestExcelController extends Controller
         }
 
     }
-    public function importFile()
-    {
-        $orphans = Orphan::all();
-        return view('excel.excelCode', compact(['orphans']));
-    }
-    public function importExcel(Request $request){
-
-
-        $validator = Validator::make($request->all(), [
-         'file' => 'required|max:5000|mimes:xlsx,xls,csv'
-        ]);
-        if($validator->passes()){
-            $dataTime = date('Ymd_His');
-            $file = $request->file('file');
-            $fileName = $dataTime . '-'. $file->getClientOriginalName ();
-            $savePath = public_path('/upload/');
-            $file->move($savePath, $fileName);
-            $excel = Importer::make('Excel');
-            $excel->load($savePath.$fileName);
-            $collection = $excel->getCollection();
-            if(is_array($collection[1]) && sizeof($collection[1]) == 22){
-                for($row=1; $row<sizeof($collection); $row++){
-                    try{
-                         $orphan = new Orphan();
-                         if(Orphan::all()->where('orphanIdentity','=',$collection[$row][15])->count() == 1) {
-                             $orphan = Orphan::all()->where('orphanIdentity', '=', $collection[$row][15])->first();
-                         }
-                        if($collection[$row][15] != "") {
-                            $orphan->orphanNumber = $collection[$row][0];
-                            //$full_name = explode(" ",$collection[$row][1],4);
-                            $orphan->orphanName = $collection[$row][1];
-                            $orphan->mothersName = $collection[$row][2];
-                            $orphan->mothersIdentity = $collection[$row][3];
-                            $orphan->breadwinnerName = $collection[$row][4];
-                            $orphan->relativeRelation = $collection[$row][5];
-                            $orphan->breadwinnerIdentity = $collection[$row][6];
-                            $orphan->phoneNumber = $collection[$row][7];
-                            $orphan->accountNumber = $collection[$row][8];
-                            $orphan->address = $collection[$row][9];
-                            $orphan->educationalLevel = $collection[$row][10];
-                            $orphan->guarantyType = $collection[$row][11];
-                            $orphan->dob = $collection[$row][12];
-                            $orphan->healthStatus = $collection[$row][13];
-                            $orphan->disease = $collection[$row][14];
-                            $orphan->orphanIdentity = $collection[$row][15];
-                            $orphan->educationalAttainmentLevel = $collection[$row][16];
-                            if ($collection[$row][17] == "ذكر") {
-                                $orphan->gender = 0;
-                            } else {
-                                $orphan->gender = 1;
-                            }
-                            $orphan->fathersDeathDate = $collection[$row][18];
-                            $orphan->causeOfDeath = $collection[$row][19];
-                            $orphan->marketingDate = $collection[$row][20];
-                            $orphan->guarantyDate = $collection[$row][21];
-                            $orphan->user_id = 1;//auth()->user()->id;
-                            $orphan->save();
-                        }
-                        }catch(\Exception $e){
-                        return redirect()->back()
-                            ->with(['errors'=>[$e->getMessage()]]);
-                    }
-
-                }
-
-
-            }else{
-                return redirect()->back()->with(['errors'=>[0 => 'Please provide data in file according to sample file.']]);
-            }
-            File::delete($savePath.$fileName);
-            return redirect()->back()->with(['success'=>'File uploaded successfully.', 'orphans'=>Orphan::all()]);
-
-        }else{
-            return redirect()->back()->with(['errors'=>$validator->errors()->all()]);
-        }
-    }
-
     function  pdf(){
 
         foreach (Orphan::all() as  $orphan) {
@@ -180,16 +95,76 @@ class TestExcelController extends Controller
 
 
     }
-    function  test(){
-        $permissions = Permission::all();
-        foreach ($permissions as $permission){
-            $permission_user = new PermissionUser();
-            $permission_user->permission_id = $permission->id;
-            $permission_user->user_id = 1;
-            $permission_user->add_user_id = 1;
-            $permission_user->save();
 
+    public function test(Request $request){
+        $yourFileName = 'Orphans.xlsx';
+        $yourCollection = [];
+        $headerColumnsRow = [
+            '#',
+            'رقم اليتيم',
+            'اسم اليتيم',
+            'اسم اليتيم بالإنجليزية',
+            'اسم الام',
+            'رقم هوية الأم',
+            'اسم المعيل',
+            'اسم المعيل بالإنجليزية',
+            'صلة القرابة',
+            'رقم هوية المعيل',
+            'رقم الجوال',
+            'رقم الحساب',
+            'العنوان',
+            'المرحلة الدراسية',
+            'نوع الكفالة',
+            'تاريخ الميلاد',
+            'الحالة الصحية',
+            'نوع المرض أو الإعاقة',
+            'رقم هوية اليتيم',
+            'التحصيل الدراسي',
+            'الجنس',
+            'تاريخ وفاة الأب',
+            'سبب وفاة الأب',
+            'تاريخ التسويق',
+            'تاريخ الكفالة',
+
+        ];
+        foreach ($headerColumnsRow as $key => $value){
+            $yourCollection[0][$key] = $value;
+        }
+        foreach (Orphan::all() as $key =>$value){
+            $rowId = $key+1;
+            $yourCollection[$rowId][0] = $rowId;
+            $yourCollection[$rowId][1] = $value->orphanNumber;
+            $yourCollection[$rowId][2] = $value->orphanName;
+            $yourCollection[$rowId][3] = $value->orphanNameEn;
+            $yourCollection[$rowId][4] = $value->mothersName;
+            $yourCollection[$rowId][5] = $value->mothersIdentity;
+            $yourCollection[$rowId][6] = $value->breadwinnerName;
+            $yourCollection[$rowId][7] = $value->breadwinnerNameEn;
+            $yourCollection[$rowId][8] = $value->relativeRelation;
+            $yourCollection[$rowId][9] = $value->breadwinnerIdentity;
+            $yourCollection[$rowId][10] = $value->phoneNumber;
+            $yourCollection[$rowId][11] = $value->accountNumber;
+            $yourCollection[$rowId][12] = $value->address;
+            $yourCollection[$rowId][13] = $value->educationalLevel;
+            $yourCollection[$rowId][14] = $value->guarantyType;
+            $yourCollection[$rowId][15] = $value->dob;
+            $yourCollection[$rowId][16] = $value->healthStatus;
+            $yourCollection[$rowId][17] = $value->disease;
+            $yourCollection[$rowId][18] = $value->orphanIdentity;
+            $yourCollection[$rowId][19] = $value->educationalAttainmentLevel;
+             $gender = 'ذكر';
+            if($value->gender){
+                $gender = 'أنثى';
+            }
+            $yourCollection[$rowId][20] = $gender;
+            $yourCollection[$rowId][21] = $value->fathersDeathDate;
+            $yourCollection[$rowId][22] = $value->causeOfDeath;
+            $yourCollection[$rowId][23] = $value->marketingDate;
+            $yourCollection[$rowId][24] = $value->guarantyDate;
         }
 
+        $excel = Exporter::make('Excel');
+        $excel->load(collect($yourCollection));
+        return $excel->stream($yourFileName);
     }
 }

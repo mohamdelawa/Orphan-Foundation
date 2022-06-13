@@ -7,6 +7,7 @@ use App\Models\Orphan;
 use App\Models\TypeImage;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class OrphanController extends Controller
@@ -67,10 +68,22 @@ class OrphanController extends Controller
         return DataTables::of($orphans)
             ->addIndexColumn()
             ->addColumn('actions', function($row){
-                return '<div class="btn-group">
-                                                <a href="'.route('show.orphan',['id'=>$row['id']]).'"><button class="btn btn-sm btn-primary"   style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button></a>
-                                                <button class="btn btn-sm btn-danger"  data-id="'.$row['id'].'" id="deleteOrphanBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>
-                                          </div>';
+               $btn_group = '<div class="btn-group">';
+                if (Gate::allows('DownloadReportOrphan')) {
+                    $btn_group.= '<a href="'.route('reportOrphan',['id'=>$row['id']]).'">
+                                    <button class="btn btn-primary" ><i class="nav-icon fas fa-download"></i> </button>
+                                </a>';}
+                if (Gate::allows('ShowOrphan')) {
+                    $btn_group.= '<a href="'.route('show.orphan',['id'=>$row['id']]).'"><button class="btn btn-sm btn-primary" style="margin: 5px"> <i class="nav-icon fas fa-eye" style="margin: 3px"></i></button></a>';
+                }
+                if (Gate::allows('EditOrphan')) {
+                    $btn_group.= '<a href="'.route('show.orphan',['id'=>$row['id']]).'"><button class="btn btn-sm btn-primary" style="margin: 5px"> <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button></a>';
+                }
+                if(Gate::allows('DeleteOrphan')){
+                    $btn_group.= '<button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteOrphanBtn" style="margin: 5px"> <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>';
+                }
+                $btn_group .='</div>';
+                return $btn_group;
             })
             ->addColumn('checkbox', function($row){
                 return '<input type="checkbox" name="orphan_checkbox" data-id="'.$row['id'].'"><label></label>';
@@ -83,15 +96,22 @@ class OrphanController extends Controller
         return DataTables::of($orphans)
             ->addIndexColumn()
             ->addColumn('actions', function($row){
-                return '<div class="btn-group">
-                                <a href="'.route('reportOrphan',['id'=>$row['id']]).'">
+                $btn_group = '<div class="btn-group">';
+                if (Gate::allows('DownloadReportOrphan')) {
+                    $btn_group.= '<a href="'.route('reportOrphan',['id'=>$row['id']]).'">
                                     <button class="btn btn-primary" ><i class="nav-icon fas fa-download"></i> </button>
-                                </a>
-                                <a href="'.route('show.orphan',['id'=>$row['id']]).'">
-                                    <button class="btn btn-sm btn-primary"   style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>
-                                </a>
-                                <button class="btn btn-sm btn-danger"  data-id="'.$row['id'].'" id="deleteOrphanBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>
-                        </div>';
+                                </a>';}
+                if (Gate::allows('ShowOrphan')) {
+                    $btn_group.= '<a href="'.route('show.orphan',['id'=>$row['id']]).'"><button class="btn btn-sm btn-primary" style="margin: 5px"> <i class="nav-icon fas fa-eye" style="margin: 3px"></i></button></a>';
+                }
+                if (Gate::allows('EditOrphan')) {
+                    $btn_group.= '<a href="'.route('show.orphan',['id'=>$row['id']]).'"><button class="btn btn-sm btn-primary" style="margin: 5px"> <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button></a>';
+                }
+                if(Gate::allows('DeleteOrphan')){
+                    $btn_group.= '<button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteOrphanBtn" style="margin: 5px"> <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>';
+                }
+                $btn_group .='</div>';
+                return $btn_group;
             })
             ->addColumn('checkbox', function($row){
                 return '<input type="checkbox" name="orphan_checkbox" data-id="'.$row['id'].'"><label></label>';
@@ -137,8 +157,8 @@ class OrphanController extends Controller
             'fathersDeathDate' => 'required|date',
             'causeOfDeath' => 'required',
             'status' => 'required',
-            'marketingDate' => 'date',
-            'guarantyDate' => 'date',
+            //'marketingDate' => 'date',
+            //'guarantyDate' => 'date',
         ];
         $masseges = [
             'orphanNumber.unique' => 'رقم اليتيم موجود مسبقا.',
@@ -172,8 +192,8 @@ class OrphanController extends Controller
             'fathersDeathDate.date' => 'تاريخ وفاة الأب  غير صحيح.',
             'causeOfDeath.required' => 'سبب وفاة الأب  مطلوبة.',
             'status.required' => 'الحالة مطلوبة.',
-            'marketingDate.date'=>'تاريخ التسويق غير صحيح.',
-            'guarantyDate.date'=>'تاريخ الكفالة غير صحيح.',
+            //'marketingDate.date'=>'تاريخ التسويق غير صحيح.',
+            //'guarantyDate.date'=>'تاريخ الكفالة غير صحيح.',
             ];
         $validator = Validator::make($request->all(), $rules, $masseges);
         if ($validator->fails()) {
@@ -250,8 +270,8 @@ class OrphanController extends Controller
             'fathersDeathDate' => 'required|date',
             'causeOfDeath' => 'required',
             'status' => 'required',
-            'marketingDate' => 'date',
-            'guarantyDate' => 'date',
+            //'marketingDate' => 'date',
+            //'guarantyDate' => 'date',
         ];
         $masseges = [
             'orphanNumber.unique' => 'رقم اليتيم موجود مسبقا.',
@@ -285,8 +305,8 @@ class OrphanController extends Controller
             'fathersDeathDate.date' => 'تاريخ وفاة الأب  غير صحيح.',
             'causeOfDeath.required' => 'سبب وفاة الأب  مطلوبة.',
             'status.required' => 'الحالة مطلوبة.',
-            'marketingDate.date'=>'تاريخ التسويق غير صحيح.',
-            'guarantyDate.date'=>'تاريخ الكفالة غير صحيح.',
+            //'marketingDate.date'=>'تاريخ التسويق غير صحيح.',
+            //'guarantyDate.date'=>'تاريخ الكفالة غير صحيح.',
         ];
         $validator = Validator::make($request->all(), $rules, $masseges);
         if ($validator->fails()) {

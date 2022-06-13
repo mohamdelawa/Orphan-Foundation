@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use DataTables;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -61,7 +62,7 @@ class UserController extends Controller
 
     // GET ALL Users
     public function getUsersList(Request $request){
-        $users = User::all();
+        $users = User::all()->where('role_id','=',auth()->user()->role_id)->whereNotIn('id',[auth()->user()->id]);
         return DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('role', function($row){
@@ -69,11 +70,18 @@ class UserController extends Controller
                 return  $role_name ;
             })
             ->addColumn('actions', function($row){
-                return '<div class="btn-group">
-                           <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editUserBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>
-                           <button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deleteUserBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>
-                           <button class="btn btn-sm btn-secondary" data-id="'.$row['id'].'" id="permissionUserBtn" style="margin: 5px">الصلاحيات<i class="nav-icon fas fa-shield-alt" style="margin: 3px"></i></button>
-                        </div>';
+                $btn_group = '<div class="btn-group">';
+                if (Gate::allows('EditUser')){
+                    $btn_group .= '<button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editUserBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>';
+                }
+                if (Gate::allows('DeleteUser')) {
+                    $btn_group .= '<button class="btn btn-sm btn-danger" data-id="' . $row['id'] . '" id="deleteUserBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>';
+                }
+                if (Gate::allows('AddPermissionsUser')) {
+                    $btn_group .= '<button class="btn btn-sm btn-secondary" data-id="' . $row['id'] . '" id="permissionUserBtn" style="margin: 5px">الصلاحيات<i class="nav-icon fas fa-shield-alt" style="margin: 3px"></i></button>';
+                }
+                $btn_group .= '</div>';
+                return $btn_group;
             })
             ->addColumn('checkbox', function($row){
                 return '<input type="checkbox" name="user_checkbox" data-id="'.$row['id'].'"><label></label>';

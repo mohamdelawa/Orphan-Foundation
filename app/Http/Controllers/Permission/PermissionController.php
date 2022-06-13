@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Permission;
 use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Yajra\DataTables\Facades\DataTables;
 
 class PermissionController extends Controller
@@ -54,10 +55,15 @@ class PermissionController extends Controller
                 return $row->user->name;
             })
             ->addColumn('actions', function($row){
-                return '<div class="btn-group">
-                                                <button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editPermissionBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>
-                                                <button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deletePermissionBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>
-                                          </div>';
+                $btn_group = '<div class="btn-group">';
+                if (Gate::allows('EditPermission')) {
+                    $btn_group.= '<button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editPermissionBtn" style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>';
+                }
+                if(Gate::allows('DeletePermission')){
+                    $btn_group.= '<button class="btn btn-sm btn-danger" data-id="'.$row['id'].'" id="deletePermissionBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>';
+                }
+                $btn_group .='</div>';
+                return $btn_group;
             })
             ->addColumn('checkbox', function($row){
                 return '<input type="checkbox" name="permission_checkbox" data-id="'.$row['id'].'"><label></label>';

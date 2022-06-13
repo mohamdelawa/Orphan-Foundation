@@ -156,12 +156,12 @@
                                 </div>
                                 <div class="form-group row">
                                     <label for="marketingDate" class="col-md-2"><b>تاريخ التسويق</b><span style="color: red">*</span></label>
-                                    <input type="date" class="form-control col-md-5 mr-md-3 "  id="marketingDate" name="marketingDate" value="{{$orphan->marketingDate}}">>
+                                    <input type="date" class="form-control col-md-5 mr-md-3 "  id="marketingDate" name="marketingDate" value="{{$orphan->marketingDate}}">
                                     <span class="text-danger error-text col-md-6 marketingDate_error"></span>
                                 </div>
                                 <div class="form-group row">
                                     <label for="guarantyDate" class="col-md-2"><b>تاريخ الكفالة</b><span style="color: red">*</span></label>
-                                    <input type="date" class="form-control col-md-5 mr-md-3"  id="guarantyDate" name="guarantyDate" value="{{$orphan->guarantyDate}}">>
+                                    <input type="date" class="form-control col-md-5 mr-md-3"  id="guarantyDate" name="guarantyDate" value="{{$orphan->guarantyDate}}">
                                     <span class="text-danger error-text col-md-6 guarantyDate_error"></span>
                                 </div>
                             </div>
@@ -177,11 +177,14 @@
                         </div>
                     </div>
                     <div class="card-footer">
+                        @can('EditOrphan')
                         <button class="btn btn-primary" type="submit">حفظ</button>
+                        @endcan
                     </div>
                 </div>
             </form>
         </div>
+        @can('ShowImagesTableForOrphan')
         <div class="row" >
             <div class="col-md-12">
                 <div class="card">
@@ -210,9 +213,15 @@
             </div>
 
         </div>
+        @can('AddImageForOrphan')
+            @include('orphan/add-image-modal')
+            @endcan
+        @can('EditImageForOrphan')
+            @include('orphan/edit-image-modal')
+            @endcan
+        @endcan
     </div>
-    @include('orphan/add-image-modal')
-    @include('orphan/edit-image-modal')
+
 @endsection
 
 @section('script')

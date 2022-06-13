@@ -8,6 +8,7 @@ use App\Models\Payment;
 use App\Models\PaymentOrphan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use DataTables;
 
@@ -104,10 +105,15 @@ class PaymentOrphanController extends Controller
                 return User::find($row->user_id)->name;
             })
             ->addColumn('actions', function($row){
-                return '<div class="btn-group">
-                                    <button class="btn btn-sm btn-primary"  data-id="'.$row['id'].'" id="editPaymentOrphanBtn"   style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>
-                                <button class="btn btn-sm btn-danger"  data-id="'.$row['id'].'" id="deletePaymentOrphanBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>
-                        </div>';
+                $btn_group = '<div class="btn-group">';
+                if (Gate::allows('EditPaymentOrphan')) {
+                    $btn_group.= '<button class="btn btn-sm btn-primary"  data-id="'.$row['id'].'" id="editPaymentOrphanBtn"   style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>';
+                }
+                if(Gate::allows('DeletePaymentOrphan')){
+                    $btn_group.= '<button class="btn btn-sm btn-danger"  data-id="'.$row['id'].'" id="deletePaymentOrphanBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>';
+                }
+                $btn_group .='</div>';
+                return $btn_group;
             })
             ->addColumn('checkbox', function($row){
                 return '<input type="checkbox" name="payment_orphan_checkbox" data-id="'.$row['id'].'"><label></label>';
@@ -149,10 +155,15 @@ class PaymentOrphanController extends Controller
                 return User::find($row->user_id)->name;
             })
             ->addColumn('actions', function($row){
-                return '<div class="btn-group">
-                                    <button class="btn btn-sm btn-primary"  data-id="'.$row['id'].'" id="editPaymentOrphanBtn"   style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>
-                                <button class="btn btn-sm btn-danger"  data-id="'.$row['id'].'" id="deletePaymentOrphanBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>
-                        </div>';
+                $btn_group = '<div class="btn-group">';
+                if (Gate::allows('EditPaymentOrphan')) {
+                    $btn_group.= '<button class="btn btn-sm btn-primary"  data-id="'.$row['id'].'" id="editPaymentOrphanBtn"   style="margin: 5px">تعديل <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>';
+                }
+                if(Gate::allows('DeletePaymentOrphan')){
+                    $btn_group.= '<button class="btn btn-sm btn-danger"  data-id="'.$row['id'].'" id="deletePaymentOrphanBtn" style="margin: 5px">حذف <i class="nav-icon fas fa-trash-alt" style="margin: 3px"></i></button>';
+                }
+                $btn_group .='</div>';
+                return $btn_group;
             })
             ->addColumn('checkbox', function($row){
                 return '<input type="checkbox" name="payment_orphan_checkbox" data-id="'.$row['id'].'"><label></label>';

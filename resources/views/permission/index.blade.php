@@ -6,7 +6,9 @@
                     <div class="card">
                         <div class="card-header row" style="text-align: right;">
                             <div class="col-md-1" >
+                                @can('AddPermission')
                                 <button class="btn btn-primary  " data-toggle="modal" data-target="#addPermission"><i class="nav-icon fas fa-plus"></i></button>
+                                   @endcan
                             </div>
                             <div class="col-md-11" >
                                 <span>الصلاحيات</span>
@@ -31,9 +33,12 @@
             </div>
         </div>
 
+        @can('AddPermission')
     @include('permission.add-permission-modal')
+    @endcan
+        @can('EditPermission')
     @include('permission.edit-permission-modal')
-
+@endcan
 @endsection
 @section('script')
     <script>
