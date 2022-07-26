@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use \Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Session;
+
 class LoginController extends Controller
 {
     /**
@@ -16,10 +18,6 @@ class LoginController extends Controller
     protected $redirectTo = RouteServiceProvider::HOME;
 
     public  function  login(){
-        if (Auth::check()){
-            Auth::logout();
-        }
-
         return view('auth.login');
     }
     public function __construct()

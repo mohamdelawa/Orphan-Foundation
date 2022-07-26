@@ -48,6 +48,9 @@
                                     @can('AddExcelPaymentOrphan')
                                         <a class="dropdown-item" data-toggle="modal" data-target="#addExcelPaymentsOrphans">استيراد من اكسل<i class="nav-icon fas fa-file-excel" style="margin: 5px"></i></a>
                                 @endcan
+                                        @can('ExportExcelPaymentOrphans')
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#exportExcelPaymentsOrphans"> تصدير اكسل <i class="nav-icon fas fa-file-download" style="margin: 5px"></i></a>
+                                        @endcan
                                 </div>
                             </div>
                             </div>
@@ -88,6 +91,9 @@
     @endcan
     @can('AddExcelPaymentOrphan')
     @include('payment.payment-orphan.add-excel-payments-orphans-modal')
+    @endcan
+    @can('ExportExcelPaymentOrphans')
+        @include('payment.payment-orphan.export-excel-payments-orphans-modal')
     @endcan
 @endsection
 @section('script')

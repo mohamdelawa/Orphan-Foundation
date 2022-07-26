@@ -43,6 +43,7 @@ class ImportExcelPaymentsOrphansController extends Controller
                 $errors =[];
                 $countAllPaymentOrphan = sizeof($collection)-1;
                 $countAddedPaymentOrphan = 0;
+                $countUpdatedPaymentOrphan = 0;
                 $countCancelPaymentOrphan = 0;
                 for($row=1; $row<sizeof($collection); $row++){
                     $status = true;
@@ -69,6 +70,11 @@ class ImportExcelPaymentsOrphansController extends Controller
                             $orphan_id = Orphan::all()->where('orphanIdentity','=',$collection[$row][0])->first()->id;
                             $payment_id = Payment::all()->where('name','=',$request->paymentName)->first()->id;
                             $payment_orphan = new PaymentOrphan();
+                            $checkPaymentOrphan = PaymentOrphan::all()->where('orphan_id','=',$orphan_id)->where('payment_id','=',$payment_id);
+                           if($checkPaymentOrphan->isNotEmpty()){
+                               $payment_orphan = $checkPaymentOrphan->first();
+                               ++$countUpdatedPaymentOrphan;
+                           }
                             $payment_orphan->payment_id =  $payment_id ;
                             $payment_orphan->warrantyValue = $collection[$row][1];
                             $payment_orphan->orphan_id = $orphan_id;
@@ -86,12 +92,13 @@ class ImportExcelPaymentsOrphansController extends Controller
 
                 }
                 $listErrors = ImportExcelOrphansController::listErrors($errors);
-                $msg = 'تمت عملية اضافة صرفيات الأيتام بنجاح. العدد الكلي للأيتام : '.$countAllPaymentOrphan.'،عدد الأيتام التي تم إضافة صرفية لهم : '.$countAddedPaymentOrphan.'،عدد الأيتام التي لم تضاف لهم صرفية :'.$countCancelPaymentOrphan.'.';
+                $msg = 'تمت عملية اضافة صرفيات الأيتام بنجاح. العدد الكلي للأيتام : '.$countAllPaymentOrphan.'،عدد الأيتام التي تم إضافة صرفية لهم : '.$countAddedPaymentOrphan.'،عدد الأيتام التي تم تعديل صرفياتهم :'.$countUpdatedPaymentOrphan.'عدد الايتام التي لم تضاف لهم صرفية'.$countCancelPaymentOrphan.'.';
                 File::delete($savePath.$fileName);
                 $isAllAdded =false;
                 if($countAddedPaymentOrphan == $countAllPaymentOrphan){
                     $isAllAdded = true;
                 }
+                File::delete($savePath.$fileName);
                 return response()->json(['code'=>1, 'errors'=>$listErrors,  'msg' => $msg, 'isAllAdded' =>$isAllAdded]);
 
             }else{

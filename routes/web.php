@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/teste', 'TestExcelController@test')->name('import');
+Route::get('/teste', 'TestExcelController@store')->name('import');
 Route::get('/reportOrphan/{id}', 'TestExcelController@reportOrphan')->name('reportOrphan');
 Route::get('/report', 'TestExcelController@pdf')->name('pdf');
 
@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/updateImageDetails','Orphan\ImageGalleryController@update')->middleware('can:EditImageForOrphan')->name('update.image.details');
         Route::post('/deleteImage','Orphan\ImageGalleryController@deleteImage')->middleware('can:DeleteImageForOrphan')->name('delete.image');
         Route::post('/deleteSelectedImages','Orphan\ImageGalleryController@deleteSelectedImages')->middleware('can:DeleteImageForOrphan')->name('delete.selected.images');
-        Route::post('/addExcelOrphans','Orphan\ImportExcelOrphansController@store')->middleware('can:AddExcelOrphan')->name('add.excel.orphans');
+        Route::post('/addExcelOrphans','TextExcelController@import')->middleware('can:AddExcelOrphans')->name('add.excel.orphans');
         Route::get('/ExportExcelOrphans', 'Orphan\ExportExcelOrphan@exportAllOrphans')->middleware('can:ExportExcelOrphans')->name('export.excel.orphans');
         //Route::post('/uploadImagesReports', 'TestExcelController@uploadFolder')->name('import.images.reports.orphan');
     });
@@ -61,7 +61,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/updatePaymentDetails','Payment\PaymentController@update')->middleware('can:EditPayment')->name('update.payment.details');
         Route::post('/deletePayment','Payment\PaymentController@deletePayment')->middleware('can:DeletePayment')->name('delete.payment');
         Route::post('/deleteSelectedPayments','Payment\PaymentController@deleteSelectedPayments')->middleware('can:DeletePayment')->name('delete.selected.payments');
-
     });
     Route::prefix('paymentsOrphans')->middleware('IsPaymentsOrphansPage')->group(function (){
         Route::get('/', 'Payment\PaymentOrphanController@index')->name('paymentOrphans.list');
@@ -74,6 +73,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/deletePaymentOrphan','Payment\PaymentOrphanController@deletePaymentOrphan')->middleware('can:DeletePaymentOrphan')->name('delete.payment.orphan');
         Route::post('/deleteSelectedPaymentOrphans','Payment\PaymentOrphanController@deleteSelectedPaymentOrphans')->middleware('can:DeletePaymentOrphan')->name('delete.selected.payments_orphans');
         Route::post('/addExcelPaymentsOrphans','Payment\ImportExcelPaymentsOrphansController@store')->middleware('can:AddExcelPaymentOrphan')->name('add.excel.payments.orphans');
+        Route::get('/ExportExcelPaymentOrphans/{id}', 'Payment\ExportExcelPaymentOrphan@exportPaymentOrphans')->middleware('can:ExportExcelPaymentOrphans')->name('export.excel.payment.orphans');
+        Route::get('/ExportExcelOrphans', 'Payment\ExportExcelPaymentOrphan@exportPaymentsOrphans')->middleware('can:ExportExcelPaymentOrphans')->name('export.excel.payments.orphans');
     });
     Route::prefix('typeImages')->middleware('IsTypeImagesPage')->group(function (){
         Route::get('/','User\TypeImageController@index')->name('type.images.list');
@@ -100,6 +101,8 @@ Route::middleware('auth')->group(function () {
         Route::post('/addPermissionsUser','Permission\PermissionUserController@addPermissionsUser')->middleware('can:AddPermissionsUser')->name('add.permissions.user');
     });
 });
+
+
 Route::get('/','Auth\LoginController@login')->name('index');
 Route::get('/login','Auth\LoginController@login')->name('login');
 Route::post('/authenticate','Auth\LoginController@authenticate')->name('authenticate');
@@ -114,8 +117,10 @@ Route::get('/403', function () {
 
 
 Route::get('/test', function () {
-    return view('welcome');
+    return view('in');
+    //return view('welcome');
 });
+
 
 
 

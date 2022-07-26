@@ -12,10 +12,14 @@ class PaymentOrphan extends Model
     use SoftDeletes;
     public function payment()
     {
-        return $this->belongsTo(Payment::class,'id');
+        return $this->belongsTo(Payment::class);
+    }
+    public function orphan()
+    {
+        return $this->belongsTo(Orphan::class);
     }
     public function user()
     {
-        return $this->belongsTo(User::class, 'id');
+        return $this->belongsTo(User::class);
     }
 }

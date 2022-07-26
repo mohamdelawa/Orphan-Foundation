@@ -1,13 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Controllers\orphan\ImportExcelOrphansController;
+use App\Imports\ImportOrphan;
 use App\Models\Orphan;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Importer;
 use Illuminate\Http\Request;
 use Exporter;
+use Maatwebsite\Excel\Facades\Excel;
 use Mpdf\Mpdf;
 use PDF;
 
@@ -95,8 +99,7 @@ class TestExcelController extends Controller
 
 
     }
-
-    public function test(Request $request){
+    public function exportExcel(Request $request){
         $yourFileName = 'Orphans.xlsx';
         $yourCollection = [];
         $headerColumnsRow = [
@@ -152,7 +155,7 @@ class TestExcelController extends Controller
             $yourCollection[$rowId][17] = $value->disease;
             $yourCollection[$rowId][18] = $value->orphanIdentity;
             $yourCollection[$rowId][19] = $value->educationalAttainmentLevel;
-             $gender = 'ذكر';
+            $gender = 'ذكر';
             if($value->gender){
                 $gender = 'أنثى';
             }
@@ -166,5 +169,64 @@ class TestExcelController extends Controller
         $excel = Exporter::make('Excel');
         $excel->load(collect($yourCollection));
         return $excel->stream($yourFileName);
+    }
+    public function test(Request $request){
+        $yourFileName = 'Orphans.xlsx';
+        $yourCollection = [];
+        $headerColumnsRow = [
+            '#',
+            'رقم اليتيم',
+            'اسم اليتيم',
+            'اسم المعيل',
+            'رقم هوية المعيل',
+            'رقم الحساب',
+            'العنوان',
+            'رقم هوية اليتيم',
+
+        ];
+        $yourCollection[0][0] = '';
+        $yourCollection[1][0] = '';
+        $yourCollection[2][0] = '';
+        foreach ($headerColumnsRow as $key => $value){
+            $yourCollection[3][$key] = $value;
+        }
+        foreach (Orphan::all() as $key =>$value){
+            $rowId = $key+3+1;
+            $yourCollection[$rowId][0] = $rowId;
+            $yourCollection[$rowId][1] = $value->orphanNumber;
+            $yourCollection[$rowId][2] = $value->orphanName;
+            $yourCollection[$rowId][3] = $value->breadwinnerName;
+            $yourCollection[$rowId][4] = $value->breadwinnerIdentity;
+            $yourCollection[$rowId][5] = $value->phoneNumber;
+            $yourCollection[$rowId][6] = $value->accountNumber;
+            $yourCollection[$rowId][7] = $value->orphanIdentity;
+        }
+
+        $excel = Exporter::make('Excel');
+        $excel->load(collect($yourCollection));
+        return $excel->stream($yourFileName);
+    }
+    public function import(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'file' => 'required|max:5000|mimes:xlsx,xls,csv'
+        ],
+            [
+                'file.required' => 'الملف غير مرفوع.',
+                'file.max' => 'جم الملف كبير جدا.'
+            ]
+        );
+        if (!$validator->passes()) {
+            return response()->json(['code' => 0,'error' => $validator->errors()->toArray(),'msg' => 'فشلت عملية إضافة أيتام ']);
+        } else {
+            $dataTime = date('Ymd_His');
+            $file = $request->file('file');
+            $fileName = $dataTime . '-' . $file->getClientOriginalName();
+            $savePath = public_path('/upload/');
+            $file->move($savePath,$fileName);
+            Excel::import(new ImportOrphan,$savePath . $fileName);
+            File::delete($savePath . $fileName);
+            return response()->json(['code' => 0,'msg' => 'الملف المرفق غير مطابق. استخدم كما في المثال !']);
+        }
     }
 }

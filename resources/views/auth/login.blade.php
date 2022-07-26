@@ -34,6 +34,7 @@
         </div>
         @include('massege')
         <form class=" mr-auto" action="{{route('authenticate')}}" method="post">
+            @csrf
         <div class="input-group mb-3">
           <input type="text" class="form-control" placeholder="اسم المستخدم"  name="user_name" required value="{{old('user_name')}}">
           <div class="input-group-append">
@@ -60,7 +61,7 @@
           </div>
             <br />
 
-          @csrf
+
       </form>
 
     </div>

@@ -109,8 +109,11 @@ class ImportExcelOrphansController extends Controller
                        }
                        if($status){
                            $orphan = new Orphan();
-                           if(Orphan::all()->where('orphanIdentity','=',$collection[$row][15])->count() == 1) {
-                               $orphan = Orphan::all()->where('orphanIdentity', '=', $collection[$row][15])->first();
+                           if(Orphan::onlyTrashed()->where('orphanIdentity','=',$collection[$row][17])->count() == 1){
+                                Orphan::onlyTrashed()->where('orphanIdentity', '=', $collection[$row][17])->first()->restore();
+                           }
+                           if(Orphan::all()->where('orphanIdentity','=',$collection[$row][17])->count() == 1) {
+                               $orphan = Orphan::all()->where('orphanIdentity', '=', $collection[$row][17])->first();
                                ++$countUpdateOrphan;
                            }
 
@@ -151,7 +154,7 @@ class ImportExcelOrphansController extends Controller
                    }catch(\Exception $e){
                        File::delete($savePath.$fileName);
                        return response()
-                           ->json(['code'=>0,'errors'=>[$e->getMessage()]]);
+                           ->json(['code'=>0,'msg'=>[$e->getMessage()]]);
                    }
 
                }
