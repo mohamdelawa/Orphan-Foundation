@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Exports\OrphansExport;
 use App\Http\Controllers\orphan\ImportExcelOrphansController;
 use App\Imports\ImportOrphan;
 use App\Models\Orphan;
@@ -228,5 +229,17 @@ class TestExcelController extends Controller
             File::delete($savePath . $fileName);
             return response()->json(['code' => 0,'msg' => 'الملف المرفق غير مطابق. استخدم كما في المثال !']);
         }
+    }
+    public function testexcel(){
+        $headings =  [
+            '#',
+            'رقم الهوية',
+            'رقم اليتيم',
+            ' راسم اليتيم',
+            'Updated at'
+        ];
+      $orphans = Orphan::all();
+        //return Excel::download(new OrphansExport($orphans,$headings), 'orphans.xlsx');
+        return $letter = chr(15+64);
     }
 }

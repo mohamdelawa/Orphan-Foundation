@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/teste', 'TestExcelController@store')->name('import');
+Route::get('/teste', 'TestExcelController@testexcel')->name('import');
 Route::get('/reportOrphan/{id}', 'TestExcelController@reportOrphan')->name('reportOrphan');
 Route::get('/report', 'TestExcelController@pdf')->name('pdf');
 
@@ -74,7 +74,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/deleteSelectedPaymentOrphans','Payment\PaymentOrphanController@deleteSelectedPaymentOrphans')->middleware('can:DeletePaymentOrphan')->name('delete.selected.payments_orphans');
         Route::post('/addExcelPaymentsOrphans','Payment\ImportExcelPaymentsOrphansController@store')->middleware('can:AddExcelPaymentOrphan')->name('add.excel.payments.orphans');
         Route::get('/ExportExcelPaymentOrphans/{id}', 'Payment\ExportExcelPaymentOrphan@exportPaymentOrphans')->middleware('can:ExportExcelPaymentOrphans')->name('export.excel.payment.orphans');
-        Route::get('/ExportExcelOrphans', 'Payment\ExportExcelPaymentOrphan@exportPaymentsOrphans')->middleware('can:ExportExcelPaymentOrphans')->name('export.excel.payments.orphans');
+        Route::get('/ExportExcelOrphans', 'Payment\ExportExcelPaymentOrphan@exportPaymentsOrphans1')->middleware('can:ExportExcelPaymentOrphans')->name('export.excel.payments.orphans');
     });
     Route::prefix('typeImages')->middleware('IsTypeImagesPage')->group(function (){
         Route::get('/','User\TypeImageController@index')->name('type.images.list');

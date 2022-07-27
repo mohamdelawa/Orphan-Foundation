@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\Context;
 use App\Models\Orphan;
 use App\Models\Payment;
 use App\Models\PaymentOrphan;
@@ -17,7 +18,8 @@ class PaymentOrphanController extends Controller
     public function index()
     {
         $payments = Payment::orderBy('paymentDate', 'desc')->get();
-        return view('payment.payment-orphan.index',compact(['payments']));
+        $columns = Context::columnsPayments();
+        return view('payment.payment-orphan.index',compact(['payments', 'columns']));
     }
     private  function getSearchOrphans($typeSearch, $valueSearch){
         switch ($typeSearch){
