@@ -23,7 +23,7 @@
                      </div>
                      <div class="form-group">
                          <label for="">سعر الصرف</label>
-                         <input type="number" step='0.01' class="form-control" name="exchangeRate" required>
+                         <input type="number" step='0.0001' class="form-control" name="exchangeRate" required>
                          <span class="text-danger error-text exchangeRate_error"></span>
                      </div>
                      <div class="form-group">
