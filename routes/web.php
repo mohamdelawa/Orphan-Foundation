@@ -29,7 +29,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/updateImageDetails','Orphan\ImageGalleryController@update')->middleware('can:EditImageForOrphan')->name('update.image.details');
         Route::post('/deleteImage','Orphan\ImageGalleryController@deleteImage')->middleware('can:DeleteImageForOrphan')->name('delete.image');
         Route::post('/deleteSelectedImages','Orphan\ImageGalleryController@deleteSelectedImages')->middleware('can:DeleteImageForOrphan')->name('delete.selected.images');
-        Route::post('/addExcelOrphans','TextExcelController@import')->middleware('can:AddExcelOrphans')->name('add.excel.orphans');
+        Route::post('/addExcelOrphans','Orphan\ImportExcelOrphansController@store')->middleware('can:AddExcelOrphans')->name('add.excel.orphans');
         Route::get('/ExportExcelOrphans', 'Orphan\ExportExcelOrphan@exportAllOrphans')->middleware('can:ExportExcelOrphans')->name('export.excel.orphans');
         //Route::post('/uploadImagesReports', 'TestExcelController@uploadFolder')->name('import.images.reports.orphan');
     });
