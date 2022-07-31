@@ -28,7 +28,7 @@
                         <div class = "form-group col-lg-12 row">
                             <label class="col-md-2"> الأعمدة الرئيسية </label>
                             <div class="custom-control custom-radio custom-control-inline ">
-                                <input class="custom-control-input" type="radio" name="headerLanguage" id="ar" value="ar">
+                                <input class="custom-control-input" type="radio" name="headerLanguage" id="ar" value="ar" checked>
                                 <label class="custom-control-label" for="ar">عربي</label>
                             </div>
                             <div class="custom-control custom-radio custom-control-inline" >
