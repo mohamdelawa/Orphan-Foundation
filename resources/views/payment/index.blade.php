@@ -7,9 +7,27 @@
                         <div class="card-header row " style="text-align: right;">
 
                             <div class="col-md-1" >
-                                @can('AddPayment')
-                                <button class="btn btn-primary  " data-toggle="modal" data-target="#addPayment"><i class="nav-icon fas fa-plus"></i></button>
-                                    @endcan
+                                <div class="dropdown show">
+                                    <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="nav-icon fas fa-plus"></i>
+                                    </a>
+
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink" style="text-align: right">
+                                        @can('AddPayment')
+                                            <a class="dropdown-item"  data-toggle="modal" data-target="#addPayment">إضافة صرفية<i class="nav-icon fas fa-plus" style="margin: 5px"></i></a>
+                                        @endcan
+                                        @can('AddPaymentOrphan')
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#addPaymentOrphan"> إضافة صرفية ليتيم<i class="nav-icon fas fa-plus" style="margin: 5px"></i></a>
+                                        @endcan
+                                        @can('AddExcelPaymentOrphan')
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#addExcelPaymentsOrphans">استيراد من اكسل<i class="nav-icon fas fa-file-excel" style="margin: 5px"></i></a>
+                                        @endcan
+                                        @can('ExportExcelPaymentOrphans')
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#exportExcelPaymentsOrphans"> تصدير اكسل <i class="nav-icon fas fa-file-download" style="margin: 5px"></i></a>
+                                        @endcan
+                                    </div>
+                                </div>
+
                             </div>
                             <div class="col-md-11" >
                                 <span class="">الصرفيات</span>
@@ -39,11 +57,23 @@
             </div>
         </div>
         @can('AddPayment')
-        @include('payment.add-payment-modal')
+            @include('payment.add-payment-modal')
         @endcan
         @can('EditPayment')
-        @include('payment.edit-payment-modal')
-    @endcan
+            @include('payment.edit-payment-modal')
+        @endcan
+        @can('AddPaymentOrphan')
+            @include('payment.payment-orphan.add-payment-orphan-modal')
+        @endcan
+        @can('EditPaymentOrphan')
+            @include('payment.payment-orphan.edit-payment-orphan-modal')
+        @endcan
+        @can('AddExcelPaymentOrphan')
+            @include('payment.payment-orphan.add-excel-payments-orphans-modal')
+        @endcan
+        @can('ExportExcelPaymentOrphans')
+            @include('payment.payment-orphan.export-excel-payments-orphans-modal')
+        @endcan
 @endsection
 @section('script')
     <script>
@@ -112,8 +142,6 @@
                 $('input[name="main_checkbox"]').prop('checked', false);
                 $('button#deleteAllBtn').addClass('d-none');
             });
-
-
             $(document).on('click','#editPaymentBtn', function(){
                 var payment_id = $(this).data('id');
                 $('.editPayment').find('form')[0].reset();
@@ -249,6 +277,72 @@
                         }
                     })
                 }
+            });
+            //ADD NEW Payment orphan
+            $('#add-payment-orphan-form').on('submit', function(e){
+                e.preventDefault();
+                var form = this;
+                $.ajax({
+                    url:$(form).attr('action'),
+                    method:$(form).attr('method'),
+                    data:new FormData(form),
+                    processData:false,
+                    dataType:'json',
+                    contentType:false,
+                    beforeSend:function(){
+                        $(form).find('span.error-text').text('');
+                    },
+                    success:function(data){
+                        if(data.code == 0){
+                            $.each(data.error, function(prefix, val){
+                                $(form).find('span.'+prefix+'_error').text(val[0]);
+                            });
+                            toastr.error(data.msg);
+                        }
+                        else{
+                            $('.addPaymentOrphan').modal('hide');
+                            $('.addPaymentOrphan').find('form')[0].reset();
+                            //  alert(data.msg);
+                            $('#payments-table').DataTable().ajax.reload(null, false);
+                            toastr.success(data.msg);
+                        }
+                    }
+                });
+            });
+            $('#add-excel-payments-orphans-form').on('submit', function(e){
+                e.preventDefault();
+                var form = this;
+                $.ajax({
+                    url:$(form).attr('action'),
+                    method:$(form).attr('method'),
+                    data:new FormData(form),
+                    processData:false,
+                    dataType:'json',
+                    contentType:false,
+                    beforeSend:function(){
+                        $(form).find('span.error-text').text('');
+                        document.getElementById('errors_excel').innerHTML = '';
+                    },
+                    success:function(data){
+                        if(data.code == 0){
+                            $.each(data.error, function(prefix, val){
+                                $(form).find('span.'+prefix+'_error').text(val[0]);
+                            });
+                            toastr.error(data.msg);
+                        }else if(data.code == 1){
+                            const list = document.getElementById('errors_excel');
+                            list.innerHTML = data.errors;
+                            toastr.success(data.msg);
+                            if(data.isAllAdded){
+                                $('.addExcelPaymentsOrphans').modal('hide');
+                                $('.addExcelPaymentsOrphans').find('form')[0].reset();
+                                document.getElementsByClassName('custom-file-label')[0].innerHTML = 'اختر الملف';
+
+                            }
+                            $('#payments-table').DataTable().ajax.reload(null, true);
+                        }
+                    }
+                });
             });
         });
     </script>

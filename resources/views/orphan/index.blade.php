@@ -44,7 +44,7 @@
                                         <a class="dropdown-item" data-toggle="modal" data-target="#addExcelOrphans">استيراد من اكسل<i class="nav-icon fas fa-file-excel" style="margin: 5px"></i></a>
                                     @endcan
                                             @can('ExportExcelOrphans')
-                                                <a class="dropdown-item" href="{{route('export.excel.orphans')}}" id="ExportExcelOrphans"> تصدير اكسل<i class="nav-icon fas fa-file-download" style="margin: 5px"></i></a>
+                                                <a class="dropdown-item" data-toggle="modal" data-target="#exportExcelOrphans"> تصدير اكسل<i class="nav-icon fas fa-file-download" style="margin: 5px"></i></a>
                                             @endcan
                                     </div>
                                 </div>
@@ -71,6 +71,9 @@
         @can('AddExcelOrphans')
         @include('orphan.add-excel-orphans-modal')
         @endcan
+    @can('ExportExcelOrphans')
+    @include('orphan.export-excel-orphans-modal')
+    @endcan
 @endsection
 @section('script')
     <script>

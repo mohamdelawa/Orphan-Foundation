@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Orphan;
 
 use App\Http\Controllers\Controller;
+use App\Models\Context;
 use App\Models\Orphan;
 use App\Models\TypeImage;
 use Illuminate\Http\Request;
@@ -14,7 +15,8 @@ class OrphanController extends Controller
 {
     public function index()
     {
-        return view('orphan.index');
+        $columns = Context::columnsOrphans();
+        return view('orphan.index', compact(['columns']));
     }
     private  function getSearchOrphans($typeSearch, $valueSearch){
         switch ($typeSearch){

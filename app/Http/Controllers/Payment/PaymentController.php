@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\Context;
 use App\Models\Payment;
 use App\Models\PaymentOrphan;
 use App\Models\User;
@@ -14,7 +15,9 @@ class PaymentController extends Controller
 {
     //Payments LIST
     public function index(){
-        return view('payment.index');
+        $payments = Payment::orderBy('paymentDate', 'desc')->get();
+        $columns = Context::columnsPayments();
+        return view('payment.index',compact(['payments','columns']));
     }
     //ADD NEW payments
     public function store(Request $request){
@@ -80,9 +83,6 @@ class PaymentController extends Controller
             })
             ->addColumn('actions', function($row){
                 $btn_group = '<div class="btn-group">';
-                if(Gate::allows('ExportExcelOrphans')) {
-                    $btn_group.='<a  href ="'.route('export.excel.payment.orphans',['id'=>$row['id']]).'" id = "ExportExcelOrphans" ><button class="btn btn-sm btn-primary"  style="margin: 5px">  <i class="nav-icon fas fa-file-download" style = "margin: 5px" ></i></button></a>';
-                }
                 if (Gate::allows('EditPayment')) {
                     $btn_group.= '<button class="btn btn-sm btn-primary" data-id="'.$row['id'].'" id="editPaymentBtn" style="margin: 5px"> <i class="nav-icon fas fa-edit" style="margin: 3px"></i></button>';
                 }
