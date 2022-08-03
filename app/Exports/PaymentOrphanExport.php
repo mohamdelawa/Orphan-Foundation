@@ -14,11 +14,13 @@ class PaymentOrphanExport implements FromCollection, WithHeadings, ShouldAutoSiz
     use Exportable;
     private $collect;
     private $headings;
+    private $cellsMerge;
 
-    public function __construct($collect, $headings)
+    public function __construct($collect, $headings, $cellsMerge)
     {
         $this->collect = $collect;
         $this->headings = $headings;
+        $this->cellsMerge = $cellsMerge;
     }
     /**
      * @return \Illuminate\Support\Collection
@@ -47,6 +49,14 @@ class PaymentOrphanExport implements FromCollection, WithHeadings, ShouldAutoSiz
         return [
             AfterSheet::class    => function(AfterSheet $event) use ($cellRange) {
                 $event->sheet->getDelegate()->getStyle($cellRange)->getFont()->setSize(14);
+                foreach ($this->cellsMerge as $cellMerge){
+                    $event->sheet->mergeCells($cellMerge);
+                }
+                $event->sheet->getDelegate()->getStyle($cellRange)
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+
             },
 
         ];
@@ -61,3 +71,16 @@ class PaymentOrphanExport implements FromCollection, WithHeadings, ShouldAutoSiz
 
     }
 }
+/*  for($i=1; $i<sizeof($this->collect); $i++) {
+                   // dd($this->collect);
+                    for ($j = 0; $j < sizeof($this->collect[$i]); $j++) {
+                        if ($this->collect[$i][$j] == $this->collect[$i + 1][$j]) {
+                            if($j >0 && $j <=26){
+                                $letterMerge = chr($j+65);
+                            }elseif ($j >26 && $j <=52){
+                                $letterMerge = chr(($j)%26+65);
+                            }
+                            $event->sheet->mergeCells($letterMerge.($i+1).":".$letterMerge.($i+2));
+                        }
+                    }
+                }*/

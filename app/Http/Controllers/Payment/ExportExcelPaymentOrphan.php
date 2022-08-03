@@ -74,9 +74,8 @@ class ExportExcelPaymentOrphan extends Controller
                 $orphans = Orphan::all()->whereIn('id',$orphans_id)->sortBy($columnOrderBy);
                 $yourFileName = 'PaymentOrphans.xlsx';
                 $yourCollection = [];
-                $headerColumnsRow = [
-
-                ];
+                $headerColumnsRow = [];
+                $ColumnsCellsMerge = [];
                 $headerLanguage = 'ar';
                if(isset($request->headerLanguage)){
                    if($request->headerLanguage == 'en'){
@@ -95,6 +94,9 @@ class ExportExcelPaymentOrphan extends Controller
                     if(in_array('#', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $rowId;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['#']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('orphanNumber', $columns, true)){
@@ -120,46 +122,73 @@ class ExportExcelPaymentOrphan extends Controller
                     if(in_array('mothersName', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $orphan->mothersName;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['mothersName']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('mothersIdentity', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $orphan->mothersIdentity;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['mothersIdentity']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('breadwinnerName', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $orphan->breadwinnerName;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['breadwinnerName']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('breadwinnerNameEn', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $orphan->breadwinnerNameEn;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['breadwinnerNameEn']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('relativeRelation', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $orphan->relativeRelation;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['relativeRelation']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('breadwinnerIdentity', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $orphan->breadwinnerIdentity;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['breadwinnerIdentity']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('phoneNumber', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $orphan->accountNumber;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['phoneNumber']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('accountNumber', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $orphan->accountNumber;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['accountNumber']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('address', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $orphan->address;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['address']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('educationalLevel', $columns, true)){
@@ -204,11 +233,17 @@ class ExportExcelPaymentOrphan extends Controller
                     if(in_array('fathersDeathDate', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $orphan->fathersDeathDate;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['fathersDeathDate']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('causeOfDeath', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $orphan->causeOfDeath;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['causeOfDeath']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('marketingDate', $columns, true)){
@@ -249,32 +284,50 @@ class ExportExcelPaymentOrphan extends Controller
                     if(in_array('currency', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $currency;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['currency']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('paymentDate', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $paymentDate;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['paymentDate']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('exchangeRate', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $exchangeRate;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['exchangeRate']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('commission', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $commission;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['commission']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
                     if(in_array('namePayment', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $namePayment;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['namePayment']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
                         ++$cellcounter;
                     }
 
                 }
                 if(in_array('signature', $columns, true)){
                     $headerColumnsRow[$cellcounter] = Context::columnsPayments()['signature']['name'][$headerLanguage];
+                    if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                        $ColumnsCellsMerge[] = $cellcounter;
+                    }
                 }
                 $yourCollection[$rowId + 1][0] = "";
                 $yourCollection[$rowId + 1][1] = "";
@@ -286,11 +339,37 @@ class ExportExcelPaymentOrphan extends Controller
                 $yourCollection[$rowId + 1][7] = "";
                 $yourCollection[$rowId + 1][8] = "الاجمالي";
                 $yourCollection[$rowId + 1][9] = $totalAmount;
-
+                $cellsMerge = $this->cellsMerge($orphans, $columnOrderBy, $ColumnsCellsMerge);
                 $yourCollection = collect($yourCollection);
-                return Excel::download(new PaymentOrphanExport($yourCollection,$headerColumnsRow), $yourFileName);
+                return Excel::download(new PaymentOrphanExport($yourCollection,$headerColumnsRow,$cellsMerge), $yourFileName);
             }
             return   redirect()->back()->with('error','فشلت عملية التنزيل.');
         }
+    }
+    private  function  cellsMerge($orphans, $columnOrderBy, $ColumnsCellsMerge){
+        $cellsMerge = [];
+        $orphan_group =$orphans->groupBy($columnOrderBy);
+        $i =2;
+
+        foreach ($orphan_group as $group) {
+            if (sizeof($group) >= 2){
+            foreach ($ColumnsCellsMerge as $column) {
+                $letterMerge = "";
+
+                if ($column+1 > 0 && $column+1 <= 26) {
+                    $letterMerge = chr($column+1 + 64);
+                } else {
+                    $letterMerge1 = chr(($column+1) / 26 + 64);
+                    $letterMerge2 = chr(($column+1) % 26 + 64);
+                    $letterMerge = $letterMerge1.$letterMerge2;
+                }
+                $cellsMerge[] = $letterMerge . ($i) . ":" . $letterMerge . (sizeof($group));
+
+            }
+        }
+           $i++;
+
+        }
+        return  $cellsMerge;
     }
 }
