@@ -96,6 +96,7 @@ class ExportExcelPaymentOrphan extends Controller
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['#']['name'][$headerLanguage];
                         if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
                             $ColumnsCellsMerge[] = $cellcounter;
+
                         }
                         ++$cellcounter;
                     }
@@ -141,6 +142,7 @@ class ExportExcelPaymentOrphan extends Controller
                         if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
                             $ColumnsCellsMerge[] = $cellcounter;
                         }
+
                         ++$cellcounter;
                     }
                     if(in_array('breadwinnerNameEn', $columns, true)){
@@ -271,14 +273,24 @@ class ExportExcelPaymentOrphan extends Controller
                     }
                     $totalAmountwarrantyValue += $amountwarrantyValue;
                     $totalAmount += $amount;
+                    $warrantyValueColumn = -1;
+                    $warrantyValueConvertColumn = -1;
                     if(in_array('warrantyValue', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $amountwarrantyValue;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['warrantyValue']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
+                        $warrantyValueColumn = $cellcounter;
                         ++$cellcounter;
                     }
                     if(in_array('warrantyValueConvert', $columns, true)){
                         $yourCollection[$rowId][$cellcounter] = $amount;
                         $headerColumnsRow[$cellcounter] = Context::columnsPayments()['warrantyValueConvert']['name'][$headerLanguage];
+                        if(!in_array($cellcounter, $ColumnsCellsMerge, false)) {
+                            $ColumnsCellsMerge[] = $cellcounter;
+                        }
+                        $warrantyValueConvertColumn = $cellcounter;
                         ++$cellcounter;
                     }
                     if(in_array('currency', $columns, true)){
@@ -339,15 +351,17 @@ class ExportExcelPaymentOrphan extends Controller
                 $yourCollection[$rowId + 1][7] = "";
                 $yourCollection[$rowId + 1][8] = "الاجمالي";
                 $yourCollection[$rowId + 1][9] = $totalAmount;
-                $cellsMerge = $this->cellsMerge($orphans, $columnOrderBy, $ColumnsCellsMerge);
+                $cells = $this->cells($orphans, $columnOrderBy, $ColumnsCellsMerge,$warrantyValueColumn,$warrantyValueConvertColumn);
+
                 $yourCollection = collect($yourCollection);
-                return Excel::download(new PaymentOrphanExport($yourCollection,$headerColumnsRow,$cellsMerge), $yourFileName);
+                return Excel::download(new PaymentOrphanExport($yourCollection,$headerColumnsRow,$cells["cellsMerge"]), $yourFileName);
             }
             return   redirect()->back()->with('error','فشلت عملية التنزيل.');
         }
     }
-    private  function  cellsMerge($orphans, $columnOrderBy, $ColumnsCellsMerge){
+    private  function  cells($orphans, $columnOrderBy, $ColumnsCellsMerge, $warrantyValueColumn, $warrantyValueConvertColumn){
         $cellsMerge = [];
+        $cellsSum = [];
         $orphan_group =$orphans->groupBy($columnOrderBy);
         $i =2;
 
@@ -364,12 +378,16 @@ class ExportExcelPaymentOrphan extends Controller
                     $letterMerge = $letterMerge1.$letterMerge2;
                 }
                 $cellsMerge[] = $letterMerge . ($i) . ":" . $letterMerge . (sizeof($group));
+                if ($column == $warrantyValueColumn || $column == $warrantyValueConvertColumn){
+                    $cellsSum [] = $letterMerge . ($i) . ":" . $letterMerge . (sizeof($group));
+                }
 
             }
         }
            $i++;
 
         }
-        return  $cellsMerge;
+
+        return  ["cellsMerge"=>$cellsMerge, "cellsSum"=>$cellsSum];
     }
 }
